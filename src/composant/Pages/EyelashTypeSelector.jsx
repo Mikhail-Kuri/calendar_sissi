@@ -62,8 +62,12 @@ export default function EyelashTypeSelector({ onSelect }) {
 
     const scroll = (direction) => {
         const scrollAmount = 300;
-        if (direction === 'left') scrollRef.current.scrollLeft -= scrollAmount;
-        else scrollRef.current.scrollLeft += scrollAmount;
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth',
+            });
+        }
     };
 
     return (

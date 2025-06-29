@@ -54,7 +54,7 @@ export default function HomePage() {
 
                         <div className="contact">
                             <h3>📞 Contact</h3>
-                            <p>+1 514 443 0575</p>
+                            <p>+1 (514) 443 0575</p>
                             <p>cicilsignature@gmail.com</p>
                             <a href="https://www.instagram.com/cicils_signature/" target="_blank" rel="noreferrer">
                                 Instagram : @cicils_signature

@@ -9,8 +9,8 @@
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
-    background-color: var(--rose);
     color: var(--dark);
+    /*background-color: var(--rose);*/
 }
 
 .navbar {
@@ -38,7 +38,7 @@ body {
     text-align: center;
     position: relative;
     padding: 60px 20px 40px;
-    background: linear-gradient(to bottom, #fff, var(--rose));
+    /*background: linear-gradient(to bottom, #fff, var(--rose));*/
 }
 
 .hero-section h1 {

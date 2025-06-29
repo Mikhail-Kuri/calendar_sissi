@@ -8,6 +8,13 @@
     --text-light: #fff;
 }
 
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark);
+    background-color: white;
+}
+
 .calendar-container {
     max-width: 700px;
     margin: 40px auto;
@@ -73,6 +80,29 @@
     border: 1px solid #f3dce7;
     transition: all 0.3s ease-in-out;
 }
+.day-cell.past {
+    color: gray;
+    background-color: #f2f2f2;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.day-cell.future {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.day-cell.future:hover {
+    background-color: var(--hover);
+}
+
+.day-cell.selected {
+    background-color: #00bcd4;
+    color: white;
+}
+
+
+
 
 .day-cell:hover {
     background-color: var(--hover);

@@ -13,7 +13,7 @@ body {
 }
 
 .eyelashSelectWrapper {
-    background: #fff0f5;
+    /*background: #fff0f5;*/
     min-height: 100vh;
     display: flex;
     flex-direction: column;
