@@ -1,0 +1,12 @@
+##TODO-1
+Je dois regarder la difference entre une application ayant acces à un fichier .env et une qui ne l'a pas
+Je penses que j ai deux version du calendrier. Sur le telephone il y a une photos avec le chemin ou se trouve la version du site avec la logique (old version)
+Dans le repo local ""...ton_code_est_ici" il y a la version sans le .env (nouvelle version)
+
+
+##TODO-2
+Je dois reussir à prendre un rendez-vous sur la nouvelle version avec toute la logique du old version
+
+
+##TODO-3
+Je dois configurer le compte google entreprise de sissi (il doit faire la meme chose que le old version)
