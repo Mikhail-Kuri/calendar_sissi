@@ -112,3 +112,11 @@ Aucun login Google utilisateur n’est nécessaire si :
 - le calendrier est déjà partagé avec le service account.
 
 Le service account agit comme une identité machine/backend.
+
+## SUITE
+1. Créer un projet Google Cloud dans le compte de l'entreprise
+2. T’ajouter comme admin/developer
+3. Créer un Service Account dans CE projet
+4. Activer Google Calendar API
+5. Partager le calendrier de l'entreprise avec le Service Account
+6. Utiliser la clé JSON dans le backend
