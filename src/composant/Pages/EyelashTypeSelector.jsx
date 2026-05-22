@@ -4,6 +4,7 @@ import Navbar from "../NAV/Navbar";
 
 const EYELASH_TYPES = [
     {
+        id:1,
         type: 'Classique',
         desc: "Un look naturel avec un cil synthétique par cil naturel.",
         image: '/photos/classic.jpeg',
@@ -12,6 +13,7 @@ const EYELASH_TYPES = [
         deposit: 20
     },
     {
+        id:2,
         type: 'Volume',
         desc: "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
         image: '/photos/volume.jpeg',
@@ -20,13 +22,16 @@ const EYELASH_TYPES = [
         deposit: 20
     },
     {
+        id:3,
         type: 'Hybride',
         desc: "Un mélange de classique et volume pour un look équilibré.",
         image: '/photos/hybrid.jpeg',
         price: 65,
         duration: '3h',
         deposit: 20
-    },  {
+    },
+      {
+        id:4,
         type: 'Classique',
         desc: "Un look naturel avec un cil synthétique par cil naturel.",
         image: '/photos/classic.jpeg',
@@ -35,6 +40,7 @@ const EYELASH_TYPES = [
         deposit: 20
     },
     {
+        id:5,
         type: 'Volume',
         desc: "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
         image: '/photos/volume.jpeg',
@@ -43,6 +49,7 @@ const EYELASH_TYPES = [
         deposit: 20
     },
     {
+        id:6,
         type: 'Hybride',
         desc: "Un mélange de classique et volume pour un look équilibré.",
         image: '/photos/hybrid.jpeg',
@@ -81,9 +88,9 @@ export default function EyelashTypeSelector({ onSelect }) {
                     <button className="scroll-btn left" onClick={() => scroll('left')}>◀</button>
 
                     <div className="typeList horizontal-scroll" ref={scrollRef}>
-                        {EYELASH_TYPES.map(({ type, desc, image, price, duration, deposit }) => (
+                        {EYELASH_TYPES.map(({ id,type, desc, image, price, duration, deposit }) => (
                             <div
-                                key={type}
+                                key={id}
                                 className="typeCard"
                             >
                                 <img src={image} alt={`${type} extensions`}/>
