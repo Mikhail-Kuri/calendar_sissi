@@ -45,6 +45,7 @@ app.get('/appointments', async (req, res) => {
       description: e.description || '',
       status: e.status || 'tentative',
       visibility: e.visibility || 'default',
+      transparency: e.transparency || 'opaque',
     }));
 
     res.status(200).json(events);
