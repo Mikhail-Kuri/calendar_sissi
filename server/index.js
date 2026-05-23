@@ -3,6 +3,12 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { google } from 'googleapis';
 
+console.log("ENV TEST:", {
+  email: process.env.GOOGLE_CLIENT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY ? "OK" : "MISSING",
+  calendar: process.env.GOOGLE_CALENDAR_ID
+});
+
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -11,6 +17,13 @@ app.use(express.json());
 if (!process.env.GOOGLE_PRIVATE_KEY || !process.env.GOOGLE_CLIENT_EMAIL || !process.env.GOOGLE_CALENDAR_ID) {
   console.error("❌ Veuillez définir GOOGLE_PRIVATE_KEY, GOOGLE_CLIENT_EMAIL et GOOGLE_CALENDAR_ID dans le .env");
   process.exit(1);
+}
+else{
+console.log("ENV TEST:", {
+  email: process.env.GOOGLE_CLIENT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY ? "OK" : "MISSING",
+  calendar: process.env.GOOGLE_CALENDAR_ID
+});
 }
 
 const auth = new google.auth.JWT(
