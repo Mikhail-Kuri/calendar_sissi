@@ -5,6 +5,8 @@ import Navbar from "../NAV/Navbar"; // Assurez-vous d'avoir ce fichier CSS pour 
 import {SlActionRedo} from "react-icons/sl";
 import {SlActionUndo} from "react-icons/sl";
 import { fetchAppointments } from "../../services/fetcher/fetchAppointments";
+import {formatPhoneNumber, isValidEmail, isValidPhone} from "../../utils/validators";
+
 
 const slotTemplates = [
     "09:00 - 11:00",
@@ -43,6 +45,8 @@ const MonthlyCalendarWithSlots = () => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableSlots, setAvailableSlots] = useState([]);
     const [events, setEvents] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+
 
     const [formData, setFormData] = useState({
         phone: '',
@@ -214,6 +218,18 @@ const MonthlyCalendarWithSlots = () => {
         setAvailableSlots(generatedSlots);
     }
 
+    const handleSubmit = () => {
+        console.log("RÉSERVATION :");
+
+        console.log({
+            date: formatDateLocal(selectedDate),
+            timeSlot: formData.start,
+            phone: formData.phone,
+            email: formData.email,
+            message: formData.message
+        });
+    };
+
     function displayDays(date, idx) {
         const today = new Date();
         const isSelected = date && selectedDate?.toDateString() === date.toDateString();
@@ -233,10 +249,12 @@ const MonthlyCalendarWithSlots = () => {
         );
     }
 
-    return (
+return (
+    <>
         <div>
             <Navbar/>
             <BackgroundBubbles/>
+
             <div className="calendar-header-header">
                 <h1>Réservation de rendez-vous</h1>
                 <p>Sélectionnez une date pour consulter les créneaux disponibles</p>
@@ -246,20 +264,30 @@ const MonthlyCalendarWithSlots = () => {
 
                 {/* Navigation mois */}
                 <div className="calendar-header">
-                    <button onClick={() => changeMonth(-1)}><SlActionUndo/></button>
-                    <h2>{monthNames[currentMonth]} {currentYear}</h2>
-                    <button onClick={() => changeMonth(1)}><SlActionRedo/></button>
+                    <button onClick={() => changeMonth(-1)}>
+                        <SlActionUndo/>
+                    </button>
+
+                    <h2>
+                        {monthNames[currentMonth]} {currentYear}
+                    </h2>
+
+                    <button onClick={() => changeMonth(1)}>
+                        <SlActionRedo/>
+                    </button>
                 </div>
 
-                {/* Grille des jours */}
+                {/* Grille */}
                 <div className="calendar-grid">
                     {daysOfWeek.map((day) => (
-                        <div key={day} className="day-name">{day}</div>
+                        <div key={day} className="day-name">
+                            {day}
+                        </div>
                     ))}
+
                     {calendarDays.map((date, idx) => {
                         return displayDays(date, idx);
                     })}
-
                 </div>
 
                 {/* Créneaux */}
@@ -273,6 +301,7 @@ const MonthlyCalendarWithSlots = () => {
                                 month: "long"
                             })}
                         </h3>
+
                         <div className="slots-list">
                             {availableSlots.map((slot, index) => {
                                 const isUnavailable = isSlotUnavailable(slot);
@@ -280,8 +309,19 @@ const MonthlyCalendarWithSlots = () => {
                                 return (
                                     <button
                                         key={index}
-                                        className={`slot-button ${isUnavailable ? "unavailable" : ""}`}
+                                        className={`slot-button ${
+                                            isUnavailable ? "unavailable" : ""
+                                        }`}
                                         disabled={isUnavailable}
+                                        onClick={() => {
+                                            setFormData({
+                                                ...formData,
+                                                start: slot
+                                            });
+
+
+                                            setShowModal(true);
+                                        }}
                                     >
                                         {slot}
                                     </button>
@@ -292,7 +332,84 @@ const MonthlyCalendarWithSlots = () => {
                 )}
             </div>
         </div>
-    );
+
+        {/* MODAL */}
+        {showModal && (
+            <div className="modalOverlay">
+                <div className="modalContent">
+
+                    <h2 className="modalTitle">
+                        📌 Informations du rendez-vous
+                    </h2>
+
+                    <label>Numéro de téléphone *</label>
+
+                    <input
+                        type="text"
+                        className="input"
+                        placeholder="(514) 123-4567"
+                        value={formData.phone}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                phone: formatPhoneNumber(e.target.value)
+                            })
+                        }
+                    />
+
+                    <label>Email *</label>
+
+                    <input
+                        type="email"
+                        className="input"
+                        value={formData.email}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                email: e.target.value
+                            })
+                        }
+                    />
+
+                    <label>Message (optionnel)</label>
+
+                    <textarea
+                        className="textarea"
+                        value={formData.message}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                message: e.target.value
+                            })
+                        }
+                    />
+
+                    <div className="modalActions">
+
+                        <button
+                            className="button"
+                            onClick={() => setShowModal(false)}
+                        >
+                            Annuler
+                        </button>
+
+                        <button
+                            className="button"
+//                             disabled={
+//                                 !formData.phone.trim() ||
+//                                 !formData.email.trim()
+//                             }
+                            onClick={handleSubmit}
+                        >
+                            Réserver
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        )}
+    </>
+);
 };
 
 export default MonthlyCalendarWithSlots;
