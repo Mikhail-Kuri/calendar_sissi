@@ -92,6 +92,8 @@ export default function EyelashTypeSelector({ onSelect }) {
                             <div
                                 key={id}
                                 className="typeCard"
+                                onClick={() => navigate("/monthly-calendar")}
+                                style={{ cursor: "pointer" }}
                             >
                                 <img src={image} alt={`${type} extensions`}/>
                                 <h3>{type}</h3>
@@ -107,7 +109,6 @@ export default function EyelashTypeSelector({ onSelect }) {
                                     Sélectionner
                                 </button>
                             </div>
-
                         ))}
                     </div>
 

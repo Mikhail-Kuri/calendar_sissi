@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useState,useRef,useEffect} from "react";
 import "./CSS/MonthlyCalendarWithSlots.css";
 import {BackgroundBubbles} from "../Effects/BackgroundEffects/BackgroundBubbles";
 import Navbar from "../NAV/Navbar"; // Assurez-vous d'avoir ce fichier CSS pour le style
 import {SlActionRedo} from "react-icons/sl";
 import {SlActionUndo} from "react-icons/sl";
+import { fetchAppointments } from "../../services/fetcher/fetchAppointments";
 
 const slotTemplates = [
     "09:00 - 11:00",
@@ -12,12 +13,48 @@ const slotTemplates = [
     "16:30 - 18:30"
 ];
 
+
+
 const MonthlyCalendarWithSlots = () => {
+    const [eventsCache, setEventsCache] = useState({});
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
     const [currentYear, setCurrentYear] = useState(today.getFullYear());
     const [selectedDate, setSelectedDate] = useState(null);
     const [availableSlots, setAvailableSlots] = useState([]);
+
+    const [formData, setFormData] = useState({
+        phone: '',
+        email: '',
+        message: '',
+        start: ''
+    });
+
+    useEffect(() => {
+        const key = `${currentYear}-${currentMonth}`;
+
+        const load = async () => {
+            if (eventsCache[key]) {
+                console.log("cache utilisé");
+                return;
+            }
+
+            const start = new Date(currentYear, currentMonth, 1);
+            const end = new Date(currentYear, currentMonth + 1, 0);
+
+            const events = await fetchAppointments(
+                start.toISOString(),
+                end.toISOString()
+            );
+
+            setEventsCache(prev => ({
+                ...prev,
+                [key]: events
+            }));
+        };
+
+        load();
+    }, [currentMonth, currentYear]);
 
     const getMonthDays = (month, year) => {
         const days = [];
@@ -51,7 +88,23 @@ const MonthlyCalendarWithSlots = () => {
         "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
     ];
 
+
+
     const calendarDays = getMonthDays(currentMonth, currentYear);
+
+    const unavailableSlots = {
+            "2026-05-25": ["11:30 - 13:30", "16:30 - 18:30"],
+            "2026-05-26": ["09:00 - 11:00"]
+        };
+
+
+    function isSlotUnavailable(slot) {
+        if (!selectedDate) return false;
+
+        const dateKey = selectedDate.toISOString().split("T")[0];
+
+        return unavailableSlots[dateKey]?.includes(slot);
+    }
 
     function handleDateChange(date) {
         if (date && selectedDate?.toDateString() === date.toDateString()) {
@@ -87,9 +140,9 @@ const MonthlyCalendarWithSlots = () => {
         <div>
             <Navbar/>
             <BackgroundBubbles/>
-            <div>
-                <h1>Calendrier Mensuel avec Créneaux</h1>
-                <p>Choisissez une date pour voir les créneaux disponibles.</p>
+            <div className="calendar-header-header">
+                <h1>Réservation de rendez-vous</h1>
+                <p>Sélectionnez une date pour consulter les créneaux disponibles</p>
             </div>
 
             <div className="calendar-container">
@@ -115,13 +168,28 @@ const MonthlyCalendarWithSlots = () => {
                 {/* Créneaux */}
                 {selectedDate && (
                     <div className="slots-section">
-                        <h3>Créneaux pour le {selectedDate.toLocaleDateString("fr-FR")}</h3>
+                        <h3 className="slots-title">
+                            Disponibilités du{" "}
+                            {selectedDate.toLocaleDateString("fr-FR", {
+                                weekday: "long",
+                                day: "numeric",
+                                month: "long"
+                            })}
+                        </h3>
                         <div className="slots-list">
-                            {availableSlots.map((slot, index) => (
-                                <button key={index} className="slot-button">
-                                    {slot}
-                                </button>
-                            ))}
+                            {availableSlots.map((slot, index) => {
+                                const isUnavailable = isSlotUnavailable(slot);
+
+                                return (
+                                    <button
+                                        key={index}
+                                        className={`slot-button ${isUnavailable ? "unavailable" : ""}`}
+                                        disabled={isUnavailable}
+                                    >
+                                        {slot}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
                 )}

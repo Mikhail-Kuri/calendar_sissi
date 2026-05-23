@@ -24,11 +24,17 @@ const calendar = google.calendar({ version: 'v3', auth });
 
 app.get('/appointments', async (req, res) => {
   try {
+    const { from, to } = req.query;
+
     const response = await calendar.events.list({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
-      maxResults: 2500,         // max autorisé par Google
+      maxResults: 2500,
       singleEvents: true,
-      orderBy: 'startTime'
+      orderBy: 'startTime',
+
+      // 🔥 FILTRE GOOGLE CALENDAR
+      timeMin: from ? new Date(from).toISOString() : undefined,
+      timeMax: to ? new Date(to).toISOString() : undefined,
     });
 
     const events = response.data.items.map(e => ({
@@ -42,9 +48,13 @@ app.get('/appointments', async (req, res) => {
     }));
 
     res.status(200).json(events);
+
   } catch (err) {
     console.error("Erreur récupération rendez-vous :", err);
-    res.status(500).json({ success: false, message: "Erreur lors du chargement des rendez-vous." });
+    res.status(500).json({
+      success: false,
+      message: "Erreur lors du chargement des rendez-vous."
+    });
   }
 });
 

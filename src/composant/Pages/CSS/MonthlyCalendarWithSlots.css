@@ -27,6 +27,23 @@ body {
     color: var(--text-dark);
 }
 
+.calendar-header-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.calendar-header-header h1 {
+    font-size: 32px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #c85c9c, #f8c6e0);    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.calendar-header-header p {
+    font-size: 16px;
+    color: #999;
+}
+
 .calendar-header {
     display: flex;
     justify-content: center;
@@ -148,4 +165,12 @@ body {
     background-color: var(--accent);
     color: white;
     transform: translateY(-2px);
+}
+
+.slot-button.unavailable {
+    background-color: #d3d3d3;
+    color: #777;
+    cursor: not-allowed;
+    opacity: 0.7;
+    text-decoration: line-through;
 }
