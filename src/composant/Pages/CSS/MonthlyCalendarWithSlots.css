@@ -42,7 +42,7 @@ body {
 }
 
 .calendar-header-header h1 {
-    font-size: 32px;
+    font-size: clamp(22px, 5vw, 34px);
     font-weight: 800;
 
     background: linear-gradient(90deg, var(--accent-dark), var(--primary));
@@ -348,4 +348,9 @@ body {
     cursor: not-allowed;
     opacity: 0.7;
     box-shadow: none;
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

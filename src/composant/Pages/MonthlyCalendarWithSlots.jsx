@@ -47,6 +47,9 @@ const MonthlyCalendarWithSlots = () => {
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [loadingMonths, setLoadingMonths] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
 
     const [formData, setFormData] = useState({
@@ -55,6 +58,16 @@ const MonthlyCalendarWithSlots = () => {
         message: '',
         start: ''
     });
+
+    function isFormValid() {
+        return (
+            formData.phone.trim().length > 0 &&
+            formData.email.trim().length > 0 &&
+            isValidEmail(formData.email) &&
+            isValidPhone(formData.phone) &&
+            formData.start
+        );
+    }
 
     useEffect(() => {
         const loadMonth = async (year, month) => {
@@ -255,16 +268,55 @@ const MonthlyCalendarWithSlots = () => {
         setAvailableSlots(generatedSlots);
     }
 
-    const handleSubmit = () => {
-        console.log("RÉSERVATION :");
+    const handleSubmit = async () => {
+        if (!isFormValid()) {
+            setErrorMessage("Veuillez remplir correctement le formulaire.");
+            return;
+        }
 
-        console.log({
-            date: formatDateLocal(selectedDate),
-            timeSlot: formData.start,
-            phone: formData.phone,
-            email: formData.email,
-            message: formData.message
-        });
+        setIsSubmitting(true);
+        setErrorMessage("");
+        setSuccessMessage("");
+
+        try {
+            const payload = {
+                date: formatDateLocal(selectedDate),
+                timeSlot: formData.start,
+                phone: formData.phone,
+                email: formData.email,
+                message: formData.message
+            };
+
+            console.log("RÉSERVATION :", payload);
+
+            // 🔥 ICI plus tard tu fais ton POST backend
+            // await fetch("/api/reservation", { method: "POST", body: JSON.stringify(payload) })
+
+            await new Promise(res => setTimeout(res, 800)); // simulation API
+
+            setSuccessMessage("Réservation confirmée 🎉");
+
+            await new Promise(res => setTimeout(res, 1000))
+
+            setSuccessMessage(null);
+            // reset form
+            setFormData({
+                phone: "",
+                email: "",
+                message: "",
+                start: ""
+            });
+
+            setShowModal(false);
+            setSelectedDate(null);
+            setAvailableSlots([]);
+
+        } catch (err) {
+            console.error(err);
+            setErrorMessage("Erreur lors de la réservation.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     function isDayBusy(date, events) {
@@ -448,6 +500,18 @@ return (
                         }
                     />
 
+                    {errorMessage && (
+                        <p style={{ color: "red", marginTop: "10px" }}>
+                            {errorMessage}
+                        </p>
+                    )}
+
+                    {successMessage && (
+                        <p style={{ color: "green", marginTop: "10px" }}>
+                            {successMessage}
+                        </p>
+                    )}
+
                     <div className="modalActions">
 
                         <button
@@ -459,13 +523,10 @@ return (
 
                         <button
                             className="button"
-//                             disabled={
-//                                 !formData.phone.trim() ||
-//                                 !formData.email.trim()
-//                             }
+                            disabled={!isFormValid() || isSubmitting}
                             onClick={handleSubmit}
                         >
-                            Réserver
+                            {isSubmitting ? "Confirmation..." : "Réserver"}
                         </button>
 
                     </div>
