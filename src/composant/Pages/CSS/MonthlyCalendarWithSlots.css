@@ -2,8 +2,13 @@
     --primary: #f8e1f4;
     --secondary: #ffe6f2;
     --accent: #d36ba6;
-    --hover: #fdd9ec;
-    --selected: #f4b8d9;
+
+    --hover: #ffd6ea;
+    --selected: #c85c9c;
+
+    --busy: rgba(211, 107, 166, 0.25);
+    --available: rgba(255, 255, 255, 0.9);
+
     --text-dark: #4b2c3b;
     --text-light: #fff;
 }
@@ -16,14 +21,17 @@ body {
 }
 
 .calendar-container {
-    max-width: 700px;
+    max-width: 750px;
     margin: 40px auto;
     text-align: center;
-    background-color: var(--secondary);
+
+    background: linear-gradient(180deg, #ffe6f2, #fff);
     padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    font-family: 'Segoe UI', 'Poppins', sans-serif;
+
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+    font-family: 'Poppins', sans-serif;
     color: var(--text-dark);
 }
 
@@ -53,77 +61,116 @@ body {
 }
 
 .calendar-header h2 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
 }
 
 .calendar-header button {
-    background-color: var(--accent);
+    background: var(--accent);
     border: none;
-    color: var(--text-light);
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 16px;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .calendar-header button:hover {
-    background-color: #b4528d;
+    background: #b84f8c;
+    transform: translateY(-2px);
 }
-
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
+    gap: 12px;
 }
 
 .day-name {
     font-weight: 600;
     font-size: 15px;
     padding: 6px;
-    color: #a15b86;
+    color: black;
 }
 
 .day-cell {
-    height: 55px;
-    background: #fff;
-    border-radius: 10px;
-    text-align: center;
-    line-height: 55px;
+    height: 58px;
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     font-size: 15px;
     font-weight: 500;
-    cursor: pointer;
+
+    background: white;
     border: 1px solid #f3dce7;
-    transition: all 0.3s ease-in-out;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    user-select: none;
 }
 .day-cell.past {
-    color: gray;
-    background-color: #f2f2f2;
-    pointer-events: none;
-    opacity: 0.5;
+    background: black;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
-.day-cell.future {
-    cursor: pointer;
+.day-cell.available {
+    background: white;
+}
+
+.day-cell.available:hover {
+    background: var(--hover);
+    transform: scale(1.05);
+}
+
+.day-cell.busy {
+    background: var(--busy);
+    color: var(--text-dark);
+    cursor: not-allowed;
+    position: relative;
+}
+
+.day-cell.busy::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: absolute;
+    bottom: 8px;
+}
+
+/*.day-cell.future {
+    cursor: arrow;
     transition: background-color 0.2s;
 }
 
 .day-cell.future:hover {
-    background-color: var(--hover);
-}
+    background-color: black;
+}*/
 
 .day-cell.selected {
-    background-color: #00bcd4;
+    background: var(--selected);
     color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 20px rgba(200, 92, 156, 0.3);
+    transform: scale(1.05);
 }
 
+.day-cell.loading {
+    background: linear-gradient(90deg, #eee, #f5f5f5, #eee);
+    background-size: 200% 100%;
+    animation: shimmer 1.2s infinite;
+    cursor: wait;
+}
 
-
-
-.day-cell:hover {
-    background-color: var(--hover);
-    transform: scale(1.05);
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
 .day-cell.selected {

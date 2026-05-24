@@ -46,6 +46,7 @@ const MonthlyCalendarWithSlots = () => {
     const [availableSlots, setAvailableSlots] = useState([]);
     const [events, setEvents] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [loadingMonths, setLoadingMonths] = useState({});
 
 
     const [formData, setFormData] = useState({
@@ -59,23 +60,33 @@ const MonthlyCalendarWithSlots = () => {
         const loadMonth = async (year, month) => {
             const key = `${year}-${month}`;
 
-            if (eventsCache[key]) {
-                console.log("cache used")
-                return;
-            }
+            if (eventsCache[key] || loadingMonths[key]) return;
 
-            const start = new Date(year, month, 1);
-            const end = new Date(year, month + 1, 0);
-
-            const events = await fetchAppointments(
-                toUTCStart(start),
-                toUTCEnd(end)
-            );
-
-            setEventsCache(prev => ({
+            setLoadingMonths(prev => ({
                 ...prev,
-                [key]: events
+                [key]: true
             }));
+
+            try {
+                const start = new Date(year, month, 1);
+                const end = new Date(year, month + 1, 0);
+
+                const events = await fetchAppointments(
+                    toUTCStart(start),
+                    toUTCEnd(end)
+                );
+
+                setEventsCache(prev => ({
+                    ...prev,
+                    [key]: events
+                }));
+
+            } finally {
+                setLoadingMonths(prev => ({
+                    ...prev,
+                    [key]: false
+                }));
+            }
         };
 
         const currentKey = `${currentYear}-${currentMonth}`;
@@ -265,19 +276,21 @@ const MonthlyCalendarWithSlots = () => {
         const isPast = date && date <= new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const key = `${currentYear}-${currentMonth}`;
         const monthEvents = eventsCache[key] || [];
-
-        const isBusy = isDayBusy(date, monthEvents);
+        const isLoading = loadingMonths[key];
+        const isBusy = !isPast && isDayBusy(date, monthEvents);
 
 
         return (
             <div
                 key={idx}
                 className={`day-cell
-                                ${!date ? "past" : ""}
-                                ${isSelected ? "selected" : ""} 
-                                ${isPast ? "past" : "future"}
-                                ${isBusy ? "future" : "past"}
-                            `}
+                    ${!date ? "empty" : ""}
+                    ${isSelected ? "selected" : ""}
+                    ${isPast ? "past" : ""}
+                    ${isLoading ? "loading" : ""}
+                    ${!isLoading && isBusy ? "available" : ""}
+                    ${!isLoading && !isBusy ? "busy" : ""}
+                `}
 
                 onClick={() => {
                     if (!isPast && date) handleDateChange(date);
