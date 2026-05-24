@@ -1,15 +1,17 @@
 :root {
-    --primary: #f8e1f4;
-    --secondary: #ffe6f2;
-    --accent: #d36ba6;
+    --bg: #E6DDD0;
+    --primary: #C9A6A0;
+    --accent: #728365;
+    --accent-dark: #4F684B;
+    --text-accent: #6A3E37;
 
-    --hover: #ffd6ea;
-    --selected: #c85c9c;
+    --hover: rgba(201, 166, 160, 0.25);
+    --selected: #6A3E37;
 
-    --busy: rgba(211, 107, 166, 0.25);
+    --busy: rgba(114, 131, 101, 0.25);
     --available: rgba(255, 255, 255, 0.9);
 
-    --text-dark: #4b2c3b;
+    --text-dark: #3b2a26;
     --text-light: #fff;
 }
 
@@ -25,13 +27,12 @@ body {
     margin: 40px auto;
     text-align: center;
 
-    background: linear-gradient(180deg, #ffe6f2, #fff);
+    background: #f3ede4;
     padding: 30px;
 
     border-radius: 24px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
 
-    font-family: 'Poppins', sans-serif;
     color: var(--text-dark);
 }
 
@@ -43,7 +44,10 @@ body {
 .calendar-header-header h1 {
     font-size: 32px;
     font-weight: 800;
-    background: linear-gradient(90deg, #c85c9c, #f8c6e0);    -webkit-background-clip: text;
+
+    background: linear-gradient(90deg, var(--accent-dark), var(--primary));
+
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -76,9 +80,9 @@ body {
 }
 
 .calendar-header button:hover {
-    background: #b84f8c;
-    transform: translateY(-2px);
+    background: var(--accent-dark);
 }
+
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -104,18 +108,19 @@ body {
     font-weight: 500;
 
     background: white;
-    border: 1px solid #f3dce7;
+    border: 1px solid rgba(79, 104, 75, 0.15);
 
     cursor: pointer;
     transition: all 0.2s ease;
 
     user-select: none;
 }
+
 .day-cell.past {
-    background: black;
-    color: #aaa;
+    background: #f1ece4;
+    color: #b5a9a1;
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.7;
 }
 
 .day-cell.available {
@@ -128,8 +133,8 @@ body {
 }
 
 .day-cell.busy {
-    background: var(--busy);
-    color: var(--text-dark);
+    background: rgba(114, 131, 101, 0.18);
+    color: var(--text-accent);
     cursor: not-allowed;
     position: relative;
 }
@@ -157,7 +162,7 @@ body {
     background: var(--selected);
     color: white;
     font-weight: bold;
-    box-shadow: 0 8px 20px rgba(200, 92, 156, 0.3);
+    box-shadow: 0 8px 20px rgba(106, 62, 55, 0.25);
     transform: scale(1.05);
 }
 

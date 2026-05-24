@@ -134,7 +134,7 @@ const MonthlyCalendarWithSlots = () => {
         setAvailableSlots([]);
     };
 
-    function generateSlots(startDate, endDate, appointmentMinutes = 60, breakMinutes = 15) {
+    function generateSlots(startDate, endDate, appointmentMinutes = 180, breakMinutes = 15) {
         const slots = [];
 
         const current = new Date(startDate);
@@ -233,7 +233,7 @@ const MonthlyCalendarWithSlots = () => {
             const slots = generateSlots(
                 event.start,
                 event.end,
-                60,
+                180,
                 15
             );
 
@@ -305,7 +305,7 @@ return (
     <>
         <div>
             <Navbar/>
-            <BackgroundBubbles/>
+
 
             <div className="calendar-header-header">
                 <h1>Réservation de rendez-vous</h1>

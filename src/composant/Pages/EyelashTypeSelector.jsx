@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from "../NAV/Navbar";
+import './CSS/EyelashTypeSelector.css';
 
 const EYELASH_TYPES = [
     {
@@ -66,6 +67,7 @@ export default function EyelashTypeSelector({ onSelect }) {
     // const [hoveredType, setHoveredType] = useState(null);
     const navigate = useNavigate();
     const scrollRef = useRef();
+    const isMobile = window.innerWidth <= 768;
 
     const scroll = (direction) => {
         const scrollAmount = 300;
@@ -92,7 +94,11 @@ export default function EyelashTypeSelector({ onSelect }) {
                             <div
                                 key={id}
                                 className="typeCard"
-                                onClick={() => navigate("/monthly-calendar")}
+                                onClick={() => {
+                                    if (!isMobile) {
+                                        navigate("/monthly-calendar");
+                                    }
+                                }}
                                 style={{ cursor: "pointer" }}
                             >
                                 <img src={image} alt={`${type} extensions`}/>

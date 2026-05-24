@@ -1,0 +1,92 @@
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: var(--text);
+    opacity: 0.8;
+    margin-bottom: 30px;
+}
+
+.scroll-btn {
+    position: absolute;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+    border: none;
+
+    background: var(--accent-dark);
+    color: white;
+
+    font-size: 18px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 6px 18px rgba(79, 104, 75, 0.25);
+
+    transition: all 0.2s ease;
+
+    z-index: 10;
+}
+
+.scroll-btn.left {
+    left: 10px;
+}
+
+.scroll-btn.right {
+    right: 10px;
+}
+
+.scroll-btn:hover {
+    background: var(--accent);
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .scroll-btn {
+        width: 38px;
+        height: 38px;
+
+        font-size: 16px;
+
+        background: var(--accent-dark);
+        opacity: 0.9;
+    }
+
+    .scroll-btn.left {
+        left: 10px;
+    }
+
+    .scroll-btn.right {
+        right: 10px;
+    }
+}
+
+.typeCard .select-btn {
+    margin-top: auto;
+
+    background-color: var(--accent-dark);
+    color: white;
+
+    border: none;
+    border-radius: 12px;
+
+    padding: 10px 14px;
+}
+
+.typeCard:hover {
+    transform: translateY(-6px) scale(1.02);
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+    border: 2px solid var(--accent-dark);
+}
