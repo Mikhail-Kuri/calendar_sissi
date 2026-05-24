@@ -69,9 +69,22 @@ const MonthlyCalendarWithSlots = () => {
         );
     }
 
+    function isPastMonth(year, month) {
+        const today = new Date();
+        const current = new Date(today.getFullYear(), today.getMonth(), 1);
+        const target = new Date(year, month, 1);
+
+        return target < current;
+    }
+
     useEffect(() => {
         const loadMonth = async (year, month) => {
             const key = `${year}-${month}`;
+
+            if (isPastMonth(year, month)) {
+                console.log("⛔ mois passé ignoré:", key);
+                return;
+            }
 
             if (eventsCache[key] || loadingMonths[key]) return;
 
