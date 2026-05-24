@@ -50,6 +50,7 @@ const MonthlyCalendarWithSlots = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const slotsRef = useRef(null);
 
 
     const [formData, setFormData] = useState({
@@ -279,6 +280,12 @@ const MonthlyCalendarWithSlots = () => {
         });
 
         setAvailableSlots(generatedSlots);
+        setTimeout(() => {
+            slotsRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 100);
     }
 
     const handleSubmit = async () => {
@@ -421,7 +428,7 @@ return (
 
                 {/* Créneaux */}
                 {selectedDate && (
-                    <div className="slots-section">
+                    <div className="slots-section" ref={slotsRef}>
                         <h3 className="slots-title">
                             Disponibilités du{" "}
                             {selectedDate.toLocaleDateString("fr-FR", {
