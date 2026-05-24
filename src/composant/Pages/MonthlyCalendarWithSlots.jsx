@@ -108,6 +108,18 @@ const MonthlyCalendarWithSlots = () => {
         load();
     }, [currentMonth, currentYear]);
 
+    useEffect(() => {
+        if (showModal) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "auto";
+        }
+
+        return () => {
+            document.body.style.overflow = "auto";
+        };
+    }, [showModal]);
+
     const getMonthDays = (month, year) => {
         const days = [];
         const firstDay = new Date(year, month, 1);
