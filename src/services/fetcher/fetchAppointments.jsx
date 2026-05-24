@@ -1,12 +1,26 @@
 export const fetchAppointments = async (from, to) => {
     try {
+
         const url = new URL("http://localhost:5000/appointments");
 
         if (from) url.searchParams.append("from", from);
         if (to) url.searchParams.append("to", to);
 
-        const res = await fetch(url);
+        // 👇 ICI : CHECK CACHE (avant fetch)
+
+        const res = await fetchWithTimeout(url, {}, 8000);
+
+        if (!res.ok) {
+            console.error("Erreur HTTP :", res.status);
+            return [];
+        }
+
         const data = await res.json();
+
+        if (!Array.isArray(data)) {
+            console.error("Réponse invalide (pas un tableau) :", data);
+            return [];
+        }
 
         console.log("Données récupérées :", data);
 
@@ -17,11 +31,13 @@ export const fetchAppointments = async (from, to) => {
             myEventIds.includes(event.id)
         );
 
-        if (!userStillHasEvent) {
+        if (!userStillHasEvent && currentUserId) {
             localStorage.removeItem(currentUserId);
+
             const newUserId = crypto.randomUUID();
             localStorage.setItem(newUserId, JSON.stringify([]));
             localStorage.setItem("userId", newUserId);
+
             myEventIds = [];
         }
 
@@ -42,10 +58,25 @@ export const fetchAppointments = async (from, to) => {
                 };
             });
 
+        // 👇 ICI : STORE CACHE (avant return)
         return processedEvents;
 
     } catch (err) {
-        console.error("Erreur de chargement :", err);
-        return [];
-    }
+          if (err.name === "AbortError") {
+              console.error("Timeout: le serveur a pris trop de temps");
+          } else {
+              console.error("Erreur de chargement :", err);
+          }
+          return [];
+      }
 };
+
+function fetchWithTimeout(url, options = {}, timeout = 8000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    return fetch(url, {
+        ...options,
+        signal: controller.signal,
+    }).finally(() => clearTimeout(id));
+}

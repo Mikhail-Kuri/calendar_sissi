@@ -37,16 +37,20 @@ app.get('/appointments', async (req, res) => {
       timeMax: to ? new Date(to).toISOString() : undefined,
     });
 
-    const events = response.data.items.map(e => ({
-      id: e.id,
-      title: e.summary || "Sans titre",
-      start: e.start.dateTime || e.start.date,
-      end: e.end.dateTime || e.end.date,
-      description: e.description || '',
-      status: e.status || 'tentative',
-      visibility: e.visibility || 'default',
-      transparency: e.transparency || 'opaque',
-    }));
+    const events = response.data.items
+        .filter(e => e.transparency === "transparent")
+        .map(e => ({
+            id: e.id,
+            title: e.summary || "Sans titre",
+
+            start: new Date(e.start.dateTime || e.start.date),
+            end: new Date(e.end.dateTime || e.end.date),
+
+            description: e.description || '',
+            status: e.status || 'tentative',
+            visibility: e.visibility || 'default',
+            transparency: e.transparency
+        }));
 
     res.status(200).json(events);
 

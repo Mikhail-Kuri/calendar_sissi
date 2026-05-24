@@ -56,27 +56,42 @@ const MonthlyCalendarWithSlots = () => {
     });
 
     useEffect(() => {
-        const key = `${currentYear}-${currentMonth}`;
+        const loadMonth = async (year, month) => {
+            const key = `${year}-${month}`;
 
-        const load = async () => {
             if (eventsCache[key]) {
-                console.log("cache utilisé");
+                console.log("cache used")
                 return;
             }
 
-            const start = new Date(currentYear, currentMonth, 1);
-            const end = new Date(currentYear, currentMonth + 1, 0);
+            const start = new Date(year, month, 1);
+            const end = new Date(year, month + 1, 0);
 
             const events = await fetchAppointments(
                 toUTCStart(start),
                 toUTCEnd(end)
             );
 
-
             setEventsCache(prev => ({
                 ...prev,
                 [key]: events
             }));
+        };
+
+        const currentKey = `${currentYear}-${currentMonth}`;
+
+        const nextMonthDate = new Date(currentYear, currentMonth + 1, 1);
+        const nextYear = nextMonthDate.getFullYear();
+        const nextMonth = nextMonthDate.getMonth();
+
+        const nextKey = `${nextYear}-${nextMonth}`;
+
+        const load = async () => {
+            // mois courant
+            await loadMonth(currentYear, currentMonth);
+
+            // mois suivant (prefetch en background)
+            loadMonth(nextYear, nextMonth);
         };
 
         load();
@@ -167,7 +182,6 @@ const MonthlyCalendarWithSlots = () => {
 
     function isSlotUnavailable(slot) {
         if (!selectedDate) return false;
-
         const dateKey = formatDateLocal(selectedDate);
         return unavailableSlots[dateKey]?.includes(slot);
     }
@@ -230,16 +244,41 @@ const MonthlyCalendarWithSlots = () => {
         });
     };
 
+    function isDayBusy(date, events) {
+        if (!date || !events) return false;
+
+        return events.some(event => {
+            const start = new Date(event.start);
+            const end = new Date(event.end);
+
+            // normalise jour (sans heure)
+            const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+            return d >= new Date(start.getFullYear(), start.getMonth(), start.getDate()) &&
+                   d <= new Date(end.getFullYear(), end.getMonth(), end.getDate());
+        });
+    }
+
     function displayDays(date, idx) {
         const today = new Date();
         const isSelected = date && selectedDate?.toDateString() === date.toDateString();
-        const isPast = date && date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isPast = date && date <= new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const key = `${currentYear}-${currentMonth}`;
+        const monthEvents = eventsCache[key] || [];
+
+        const isBusy = isDayBusy(date, monthEvents);
+
+
         return (
             <div
                 key={idx}
-                className={`day-cell 
+                className={`day-cell
+                                ${!date ? "past" : ""}
                                 ${isSelected ? "selected" : ""} 
-                                ${isPast ? "past" : "future"}`}
+                                ${isPast ? "past" : "future"}
+                                ${isBusy ? "future" : "past"}
+                            `}
+
                 onClick={() => {
                     if (!isPast && date) handleDateChange(date);
                 }}
