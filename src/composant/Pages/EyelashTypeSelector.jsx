@@ -113,7 +113,7 @@ export default function EyelashTypeSelector({ onSelect }) {
                             className="typeCard"
                             onClick={() => {
                                 if (!isMobile) {
-                                    navigate("/monthly-calendar");
+                                    navigate("/monthly-calendar",{state: lash});
                                 }
                             }}
                             style={{ cursor: "pointer" }}

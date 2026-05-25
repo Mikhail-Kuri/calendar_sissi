@@ -1,4 +1,5 @@
-import React, {useState,useRef,useEffect} from "react";
+import React, {useState,useRef,useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import "./CSS/MonthlyCalendarWithSlots.css";
 import {BackgroundBubbles} from "../Effects/BackgroundEffects/BackgroundBubbles";
 import Navbar from "../NAV/Navbar"; // Assurez-vous d'avoir ce fichier CSS pour le style
@@ -35,9 +36,23 @@ function formatDateLocal(date) {
     return `${year}-${month}-${day}`;
 }
 
+function getMinFromHours(string) {
+    const match = string.match(/(\d+)\s*h/i);
+
+    if (!match) {
+        return 0; // ou throw new Error("Format invalide");
+    }
+
+    const hours = Number(match[1]);
+    console.log(hours * 60)
+    return hours * 60;
+}
+
 
 
 const MonthlyCalendarWithSlots = () => {
+    const location = useLocation();
+    const currentLash = location.state || {};
     const [eventsCache, setEventsCache] = useState({});
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -79,6 +94,8 @@ const MonthlyCalendarWithSlots = () => {
     }
 
     useEffect(() => {
+        getMinFromHours(currentLash.duration)
+
         const loadMonth = async (year, month) => {
             const key = `${year}-${month}`;
 
@@ -173,7 +190,7 @@ const MonthlyCalendarWithSlots = () => {
         setAvailableSlots([]);
     };
 
-    function generateSlots(startDate, endDate, appointmentMinutes = 180, breakMinutes = 15) {
+    function generateSlots(startDate, endDate, appointmentMinutes, breakMinutes) {
         const slots = [];
 
         const current = new Date(startDate);
@@ -244,6 +261,7 @@ const MonthlyCalendarWithSlots = () => {
             return;
         }
 
+
         if (!date) return;
 
         setSelectedDate(date);
@@ -272,7 +290,7 @@ const MonthlyCalendarWithSlots = () => {
             const slots = generateSlots(
                 event.start,
                 event.end,
-                180,
+                currentLash.duration,
                 15
             );
 
