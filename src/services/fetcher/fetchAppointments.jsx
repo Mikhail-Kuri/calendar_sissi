@@ -67,7 +67,7 @@ export const fetchAppointments = async (from, to) => {
           } else {
               console.error("Erreur de chargement :", err);
           }
-          return [];
+         throw err;
       }
 };
 

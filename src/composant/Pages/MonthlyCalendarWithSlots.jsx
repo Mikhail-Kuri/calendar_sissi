@@ -7,6 +7,7 @@ import {SlActionRedo} from "react-icons/sl";
 import {SlActionUndo} from "react-icons/sl";
 import { fetchAppointments } from "../../services/fetcher/fetchAppointments";
 import {formatPhoneNumber, isValidEmail, isValidPhone} from "../../utils/validators";
+import e from "cors";
 
 
 const slotTemplates = [
@@ -120,12 +121,19 @@ const MonthlyCalendarWithSlots = () => {
                     toUTCEnd(end)
                 );
 
+                
+
                 setEventsCache(prev => ({
                     ...prev,
                     [key]: events
                 }));
-
-            } finally {
+            
+            }
+            catch(err){
+                console.log(err)
+                
+            }
+            finally {
                 setLoadingMonths(prev => ({
                     ...prev,
                     [key]: false
@@ -327,7 +335,7 @@ const MonthlyCalendarWithSlots = () => {
 
             console.log("RÉSERVATION :", payload);
 
-            // 🔥 ICI plus tard tu fais ton POST backend
+            // 🔥 ICI plus tard POST backend
             // await fetch("/api/reservation", { method: "POST", body: JSON.stringify(payload) })
 
             await new Promise(res => setTimeout(res, 800)); // simulation API
