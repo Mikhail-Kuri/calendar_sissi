@@ -3,64 +3,81 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from "../NAV/Navbar";
 import './CSS/EyelashTypeSelector.css';
 
+class Type {
+    constructor(id, type, desc, image, price, duration, deposit) {
+        this.id = id;
+        this.type = type;
+        this.desc = desc;
+        this.image = image;
+        this.price = price;
+        this.duration = duration;
+        this.deposit = deposit;
+    }
+}
+
 const EYELASH_TYPES = [
-    {
-        id:1,
-        type: 'Classique',
-        desc: "Un look naturel avec un cil synthétique par cil naturel.",
-        image: '/photos/classic.jpeg',
-        price: 50,
-        duration: '2h',
-        deposit: 20
-    },
-    {
-        id:2,
-        type: 'Volume',
-        desc: "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
-        image: '/photos/volume.jpeg',
-        price: 80,
-        duration: '4h',
-        deposit: 20
-    },
-    {
-        id:3,
-        type: 'Hybride',
-        desc: "Un mélange de classique et volume pour un look équilibré.",
-        image: '/photos/hybrid.jpeg',
-        price: 65,
-        duration: '3h',
-        deposit: 20
-    },
-      {
-        id:4,
-        type: 'Classique',
-        desc: "Un look naturel avec un cil synthétique par cil naturel.",
-        image: '/photos/classic.jpeg',
-        price: 50,
-        duration: '2h',
-        deposit: 20
-    },
-    {
-        id:5,
-        type: 'Volume',
-        desc: "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
-        image: '/photos/volume.jpeg',
-        price: 80,
-        duration: '4h',
-        deposit: 20
-    },
-    {
-        id:6,
-        type: 'Hybride',
-        desc: "Un mélange de classique et volume pour un look équilibré.",
-        image: '/photos/hybrid.jpeg',
-        price: 65,
-        duration: '3h',
-        deposit: 20
-    },
+    new Type(
+        1,
+        'Classique',
+        "Un look naturel avec un cil synthétique par cil naturel.",
+        '/photos/classic.jpeg',
+        50,
+        '2h',
+        20
+    ),
 
+    new Type(
+        2,
+        'Volume',
+        "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
+        '/photos/volume.jpeg',
+        80,
+        '4h',
+        20
+    ),
 
+    new Type(
+        3,
+        'Hybride',
+        "Un mélange de classique et volume pour un look équilibré.",
+        '/photos/hybrid.jpeg',
+        65,
+        '3h',
+        20
+    ),
+
+    new Type(
+        4,
+        'Mega Volume',
+        "Un look très intense avec beaucoup de densité.",
+        '/photos/classic.jpeg',
+        95,
+        '4h30',
+        25
+    ),
+
+    new Type(
+        5,
+        'Wispy',
+        "Effet texturé et aérien inspiré du style Kim K.",
+        '/photos/volume.jpeg',
+        85,
+        '3h30',
+        20
+    ),
+
+    new Type(
+        6,
+        'Fox Eyes',
+        "Effet allongé pour un regard étiré.",
+        '/photos/hybrid.jpeg',
+        75,
+        '3h',
+        20
+    ),
 ];
+
+
 
 
 export default function EyelashTypeSelector({ onSelect }) {
@@ -90,32 +107,42 @@ export default function EyelashTypeSelector({ onSelect }) {
                     <button className="scroll-btn left" onClick={() => scroll('left')}>◀</button>
 
                     <div className="typeList horizontal-scroll" ref={scrollRef}>
-                        {EYELASH_TYPES.map(({ id,type, desc, image, price, duration, deposit }) => (
-                            <div
-                                key={id}
-                                className="typeCard"
-                                onClick={() => {
-                                    if (!isMobile) {
-                                        navigate("/monthly-calendar");
-                                    }
+                    {EYELASH_TYPES.map((lash) => (
+                        <div
+                            key={lash.id}
+                            className="typeCard"
+                            onClick={() => {
+                                if (!isMobile) {
+                                    navigate("/monthly-calendar");
+                                }
+                            }}
+                            style={{ cursor: "pointer" }}
+                        >
+                            <img src={lash.image} alt={`${lash.type} extensions`} />
+
+                            <h3>{lash.type}</h3>
+
+                            <p className="desc">{lash.desc}</p>
+
+                            <p className="details">
+                                💰 {lash.price}$ | ⏱️ {lash.duration}
+                            </p>
+
+                            <p className="deposit">
+                                🔐 Acompte requis : {lash.deposit}$
+                            </p>
+
+                            <button
+                                className="select-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate("/monthly-calendar");
                                 }}
-                                style={{ cursor: "pointer" }}
                             >
-                                <img src={image} alt={`${type} extensions`}/>
-                                <h3>{type}</h3>
-
-                                <p className="desc">{desc}</p>
-                                <p className="details">💰 {price}$ | ⏱️ {duration}</p>
-                                <p className="deposit">🔐 Acompte requis : {deposit}$</p>
-
-                                <button
-                                    className="select-btn"
-                                    onClick={() => navigate("/monthly-calendar")}
-                                >
-                                    Sélectionner
-                                </button>
-                            </div>
-                        ))}
+                                Sélectionner
+                            </button>
+                        </div>
+                    ))}
                     </div>
 
                     <button className="scroll-btn right" onClick={() => scroll('right')}>▶</button>
