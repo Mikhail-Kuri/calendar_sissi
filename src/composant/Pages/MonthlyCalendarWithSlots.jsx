@@ -45,7 +45,6 @@ function getMinFromHours(string) {
     }
 
     const hours = Number(match[1]);
-    console.log(hours * 60)
     return hours * 60;
 }
 
@@ -73,7 +72,8 @@ const MonthlyCalendarWithSlots = () => {
         phone: '',
         email: '',
         message: '',
-        start: ''
+        start: '',
+        duration: ''
     });
 
     function isFormValid() {
@@ -82,7 +82,9 @@ const MonthlyCalendarWithSlots = () => {
             formData.email.trim().length > 0 &&
             isValidEmail(formData.email) &&
             isValidPhone(formData.phone) &&
-            formData.start
+            formData.start &&
+            formData.start.trim().length > 0
+
         );
     }
 
@@ -95,7 +97,7 @@ const MonthlyCalendarWithSlots = () => {
     }
 
     useEffect(() => {
-        getMinFromHours(currentLash.duration)
+
 
         const loadMonth = async (year, month) => {
             const key = `${year}-${month}`;
@@ -115,10 +117,12 @@ const MonthlyCalendarWithSlots = () => {
             try {
                 const start = new Date(year, month, 1);
                 const end = new Date(year, month + 1, 0);
+                const duration = getMinFromHours(currentLash.duration)
 
                 const events = await fetchAppointments(
                     toUTCStart(start),
-                    toUTCEnd(end)
+                    toUTCEnd(end),
+                    duration
                 );
 
                 
@@ -128,10 +132,6 @@ const MonthlyCalendarWithSlots = () => {
                     [key]: events
                 }));
             
-            }
-            catch(err){
-                console.log(err)
-                
             }
             finally {
                 setLoadingMonths(prev => ({
@@ -161,6 +161,7 @@ const MonthlyCalendarWithSlots = () => {
     }, [currentMonth, currentYear]);
 
     useEffect(() => {
+        console.log(availableSlots)
         if (showModal) {
             document.body.style.overflow = "hidden";
         } else {
@@ -198,23 +199,20 @@ const MonthlyCalendarWithSlots = () => {
         setAvailableSlots([]);
     };
 
-    function generateSlots(startDate, endDate, appointmentMinutes, breakMinutes) {
+    function generateSlots(startDate, endDate, appointmentMinutes = 180, breakMinutes = 15) {
         const slots = [];
 
         const current = new Date(startDate);
         const end = new Date(endDate);
 
-        while (true) {
+        if (isNaN(current) || isNaN(end)) return [];
 
-            // Heure de fin du rendez-vous
+        while (current.getTime() + appointmentMinutes * 60000 <= end.getTime()) {
+
             const appointmentEnd = new Date(
                 current.getTime() + appointmentMinutes * 60000
             );
 
-            // Si le rendez-vous dépasse la disponibilité → stop
-            if (appointmentEnd > end) break;
-
-            // Formatter les heures
             const startStr = current.toLocaleTimeString("fr-CA", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -227,10 +225,10 @@ const MonthlyCalendarWithSlots = () => {
                 hour12: false
             });
 
-            // Ajouter le slot
             slots.push(`${startStr} - ${endStr}`);
 
-            // Avancer avec le buffer
+            console.log("Créneau généré :", `${startStr} - ${endStr}`);
+
             current.setMinutes(
                 current.getMinutes() + appointmentMinutes + breakMinutes
             );
@@ -298,7 +296,7 @@ const MonthlyCalendarWithSlots = () => {
             const slots = generateSlots(
                 event.start,
                 event.end,
-                currentLash.duration,
+                getMinFromHours(currentLash.duration),
                 15
             );
 
@@ -330,7 +328,8 @@ const MonthlyCalendarWithSlots = () => {
                 timeSlot: formData.start,
                 phone: formData.phone,
                 email: formData.email,
-                message: formData.message
+                message: formData.message,
+                duration: getMinFromHours(currentLash.duration)
             };
 
             console.log("RÉSERVATION :", payload);
@@ -380,14 +379,18 @@ const MonthlyCalendarWithSlots = () => {
         });
     }
 
+
     function displayDays(date, idx) {
         const today = new Date();
         const isSelected = date && selectedDate?.toDateString() === date.toDateString();
-        const isPast = date && date <= new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isPast = date && date <= new Date(today.getFullYear(), today.getMonth(), today.getDate()) || date == null ;
         const key = `${currentYear}-${currentMonth}`;
         const monthEvents = eventsCache[key] || [];
         const isLoading = loadingMonths[key];
         const isBusy = !isPast && isDayBusy(date, monthEvents);
+
+        const isClickable = !isPast && date && !isLoading && isBusy;
+
 
 
         return (
@@ -403,7 +406,7 @@ const MonthlyCalendarWithSlots = () => {
                 `}
 
                 onClick={() => {
-                    if (!isPast && date) handleDateChange(date);
+                    if (isClickable) handleDateChange(date);
                 }}
             >
                 {date ? date.getDate() : ""}

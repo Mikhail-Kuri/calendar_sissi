@@ -1,4 +1,4 @@
-export const fetchAppointments = async (from, to) => {
+export const fetchAppointments = async (from, to,duration) => {
     try {
 
         const url = new URL("http://localhost:5000/appointments");
@@ -67,7 +67,7 @@ export const fetchAppointments = async (from, to) => {
           } else {
               console.error("Erreur de chargement :", err);
           }
-         throw err;
+         return [];
       }
 };
 
