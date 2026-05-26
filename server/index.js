@@ -5,7 +5,41 @@ import { google } from 'googleapis';
 
 dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use((req, res, next) => {
+  console.log(req.method, req.url);
+  next();
+});
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://glorious-doodle-66jjjvvg7v7h5v9g-3000.app.github.dev"
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+/*app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));*/
+
+
+/*app.use(cors({
+  origin: true,
+  credentials: true,
+}));*/
+
+app.options('*', cors());
+
 app.use(express.json());
 
 if (!process.env.GOOGLE_PRIVATE_KEY || !process.env.GOOGLE_CLIENT_EMAIL || !process.env.GOOGLE_CALENDAR_ID) {
@@ -14,10 +48,10 @@ if (!process.env.GOOGLE_PRIVATE_KEY || !process.env.GOOGLE_CLIENT_EMAIL || !proc
 }
 
 const auth = new google.auth.JWT(
-    process.env.GOOGLE_CLIENT_EMAIL,
-    null,
-    process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    ['https://www.googleapis.com/auth/calendar']
+  process.env.GOOGLE_CLIENT_EMAIL,
+  null,
+  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+  ["https://www.googleapis.com/auth/calendar"]
 );
 
 const calendar = google.calendar({ version: 'v3', auth });
