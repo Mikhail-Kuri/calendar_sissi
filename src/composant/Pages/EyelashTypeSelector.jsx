@@ -4,8 +4,9 @@ import Navbar from "../NAV/Navbar";
 import './CSS/EyelashTypeSelector.css';
 
 class Type {
-    constructor(id, type, desc, image, price, duration, deposit) {
+    constructor(id,service,type, desc, image, price, duration, deposit) {
         this.id = id;
+        this.service = service;
         this.type = type;
         this.desc = desc;
         this.image = image;
@@ -18,16 +19,18 @@ class Type {
 const EYELASH_TYPES = [
     new Type(
         1,
+        "lashes",
         'Classique',
         "Un look naturel avec un cil synthétique par cil naturel.",
         '/photos/classic.jpeg',
         50,
-        '2h',
+        '1h',
         20
     ),
 
     new Type(
         2,
+        "lashes",
         'Volume',
         "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
         '/photos/volume.jpeg',
@@ -38,6 +41,7 @@ const EYELASH_TYPES = [
 
     new Type(
         3,
+        "lashes",
         'Hybride',
         "Un mélange de classique et volume pour un look équilibré.",
         '/photos/hybrid.jpeg',
@@ -48,6 +52,7 @@ const EYELASH_TYPES = [
 
     new Type(
         4,
+        "lashes",
         'Mega Volume',
         "Un look très intense avec beaucoup de densité.",
         '/photos/classic.jpeg',
@@ -58,16 +63,18 @@ const EYELASH_TYPES = [
 
     new Type(
         5,
+        "lashes",
         'Wispy',
         "Effet texturé et aérien inspiré du style Kim K.",
         '/photos/volume.jpeg',
         85,
-        '3h30',
+        '4h',
         20
     ),
 
     new Type(
         6,
+        "lashes",
         'Fox Eyes',
         "Effet allongé pour un regard étiré.",
         '/photos/hybrid.jpeg',

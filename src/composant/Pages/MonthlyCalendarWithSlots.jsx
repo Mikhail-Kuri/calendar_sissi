@@ -37,15 +37,15 @@ function formatDateLocal(date) {
     return `${year}-${month}-${day}`;
 }
 
-function getMinFromHours(string) {
-    const match = string.match(/(\d+)\s*h/i);
+function getMinFromHours(str) {
+    const match = str.match(/(\d+)\s*h\s*(\d+)?/i);
 
-    if (!match) {
-        return 0; // ou throw new Error("Format invalide");
-    }
+    if (!match) return 0;
 
-    const hours = Number(match[1]);
-    return hours * 60;
+    const hours = Number(match[1] || 0);
+    const minutes = Number(match[2] || 0);
+
+    return hours * 60 + minutes;
 }
 
 
@@ -53,6 +53,11 @@ function getMinFromHours(string) {
 const MonthlyCalendarWithSlots = () => {
     const location = useLocation();
     const currentLash = location.state || {};
+    const duration = getMinFromHours(currentLash.duration) || 180;
+    const breakMinutes = 15;
+    const currentService = currentLash.service || "lashes";
+    const currentType = currentLash.type || "Classique";
+    const deposit = currentLash.deposit || 20;
     const [eventsCache, setEventsCache] = useState({});
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -81,10 +86,7 @@ const MonthlyCalendarWithSlots = () => {
             formData.phone.trim().length > 0 &&
             formData.email.trim().length > 0 &&
             isValidEmail(formData.email) &&
-            isValidPhone(formData.phone) &&
-            formData.start &&
-            formData.start.trim().length > 0
-
+            isValidPhone(formData.phone)
         );
     }
 
@@ -161,7 +163,6 @@ const MonthlyCalendarWithSlots = () => {
     }, [currentMonth, currentYear]);
 
     useEffect(() => {
-        console.log(availableSlots)
         if (showModal) {
             document.body.style.overflow = "hidden";
         } else {
@@ -199,7 +200,7 @@ const MonthlyCalendarWithSlots = () => {
         setAvailableSlots([]);
     };
 
-    function generateSlots(startDate, endDate, appointmentMinutes = 180, breakMinutes = 15) {
+    function generateSlots(eventId,startDate, endDate, appointmentMinutes = 180, breakMinutes = 15) {
         const slots = [];
 
         const current = new Date(startDate);
@@ -225,9 +226,12 @@ const MonthlyCalendarWithSlots = () => {
                 hour12: false
             });
 
-            slots.push(`${startStr} - ${endStr}`);
-
-            console.log("Créneau généré :", `${startStr} - ${endStr}`);
+            slots.push({
+                   eventId,                 // 👈 Lien direct avec l'event
+                   start: current.toISOString(),
+                   end: appointmentEnd.toISOString(),
+                   time_period: `${startStr} - ${endStr}`
+           });
 
             current.setMinutes(
                 current.getMinutes() + appointmentMinutes + breakMinutes
@@ -258,6 +262,8 @@ const MonthlyCalendarWithSlots = () => {
         const dateKey = formatDateLocal(selectedDate);
         return unavailableSlots[dateKey]?.includes(slot);
     }
+
+
 
     function handleDateChange(date) {
 
@@ -294,6 +300,7 @@ const MonthlyCalendarWithSlots = () => {
         selectedEvents.forEach(event => {
 
             const slots = generateSlots(
+                event.id,
                 event.start,
                 event.end,
                 getMinFromHours(currentLash.duration),
@@ -304,7 +311,7 @@ const MonthlyCalendarWithSlots = () => {
         });
 
         setAvailableSlots(generatedSlots);
-        setTimeout(() => {
+        requestAnimationFrame(() => {
             slotsRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "start"
@@ -325,11 +332,17 @@ const MonthlyCalendarWithSlots = () => {
         try {
             const payload = {
                 date: formatDateLocal(selectedDate),
-                timeSlot: formData.start,
                 phone: formData.phone,
                 email: formData.email,
                 message: formData.message,
-                duration: getMinFromHours(currentLash.duration)
+                service: currentService,
+                type: currentType,
+                duration: duration,
+                breakMinutes: breakMinutes,
+                deposit: deposit,
+                eventId: formData.start.eventId,
+                end: formData.start.end,
+                start: formData.start.start
             };
 
             console.log("RÉSERVATION :", payload);
@@ -363,6 +376,15 @@ const MonthlyCalendarWithSlots = () => {
             setIsSubmitting(false);
         }
     };
+
+    function handleDayClick(slot) {
+        setFormData(prev => ({
+            ...prev,
+            start: slot
+        }));
+        console.log(slot)
+        setShowModal(true);
+    }
 
     function isDayBusy(date, events) {
         if (!date || !events) return false;
@@ -474,21 +496,11 @@ return (
                                 return (
                                     <button
                                         key={index}
-                                        className={`slot-button ${
-                                            isUnavailable ? "unavailable" : ""
-                                        }`}
+                                        className={`slot-button ${isUnavailable ? "unavailable" : ""}`}
                                         disabled={isUnavailable}
-                                        onClick={() => {
-                                            setFormData({
-                                                ...formData,
-                                                start: slot
-                                            });
-
-
-                                            setShowModal(true);
-                                        }}
+                                        onClick={() => handleDayClick(slot)}
                                     >
-                                        {slot}
+                                        {slot.time_period}
                                     </button>
                                 );
                             })}
