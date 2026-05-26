@@ -79,7 +79,7 @@ const EYELASH_TYPES = [
         "Effet allongé pour un regard étiré.",
         '/photos/hybrid.jpeg',
         75,
-        '3h',
+        '3h45',
         20
     ),
 ];

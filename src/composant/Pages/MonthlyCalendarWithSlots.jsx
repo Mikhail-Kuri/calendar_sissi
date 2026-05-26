@@ -386,18 +386,28 @@ const MonthlyCalendarWithSlots = () => {
         setShowModal(true);
     }
 
-    function isDayBusy(date, events) {
+    function isDayBusy(date, events, duration) {
         if (!date || !events) return false;
+
+        const dayStart = new Date(date);
+        dayStart.setHours(0, 0, 0, 0);
+
+        const dayEnd = new Date(date);
+        dayEnd.setHours(23, 59, 59, 999);
 
         return events.some(event => {
             const start = new Date(event.start);
             const end = new Date(event.end);
 
-            // normalise jour (sans heure)
-            const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            // vérifier que l'event touche la journée
+            const overlapsDay = start <= dayEnd && end >= dayStart;
+            if (!overlapsDay) return false;
 
-            return d >= new Date(start.getFullYear(), start.getMonth(), start.getDate()) &&
-                   d <= new Date(end.getFullYear(), end.getMonth(), end.getDate());
+            // durée réelle de l'event en minutes
+            const eventDuration = (end - start) / 60000;
+
+            // 👇 ta règle métier
+            return eventDuration >= duration;
         });
     }
 
@@ -409,8 +419,7 @@ const MonthlyCalendarWithSlots = () => {
         const key = `${currentYear}-${currentMonth}`;
         const monthEvents = eventsCache[key] || [];
         const isLoading = loadingMonths[key];
-        const isBusy = !isPast && isDayBusy(date, monthEvents);
-
+        const isBusy = !isPast && isDayBusy(date, monthEvents,duration);
         const isClickable = !isPast && date && !isLoading && isBusy;
 
 
