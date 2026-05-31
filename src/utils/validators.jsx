@@ -11,3 +11,12 @@ export const formatPhoneNumber = (value) => {
     if (digits.length < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
     return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 };
+
+ export function isFormValid(formData) {
+        return (
+            formData.phone.trim().length > 0 &&
+            formData.email.trim().length > 0 &&
+            isValidEmail(formData.email) &&
+            isValidPhone(formData.phone)
+        );
+    }
