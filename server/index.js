@@ -6,6 +6,18 @@ import { google } from 'googleapis';
 dotenv.config();
 const app = express();
 
+const locks = new Map();
+
+function acquireLock(eventId) {
+  if (locks.get(eventId)) return false;
+  locks.set(eventId, true);
+  return true;
+}
+
+function releaseLock(eventId) {
+  locks.delete(eventId);
+}
+
 app.use((req, res, next) => {
   console.log(req.method, req.url);
   next();
@@ -99,8 +111,16 @@ app.get('/appointments', async (req, res) => {
 
 
 app.post('/appointments', async (req, res) => {
+    const { title, description, start, end, email, phone, breakMinute, eventId } = req.body;
+
+  if (!acquireLock(eventId)) {
+    return res.status(409).json({
+      success: false,
+      message: "Ce créneau est déjà en cours de réservation."
+    });
+  }
+
   try {
-    const { eventId, title, description, start, end, email, phone } = req.body;
 
     if (!eventId || !start || !end) {
       return res.status(400).json({
@@ -109,6 +129,14 @@ app.post('/appointments', async (req, res) => {
       });
     }
 
+    const resStart = new Date(start);
+    const resEnd = new Date(end);
+
+    const breakMs = (parseInt(breakMinute || 0)) * 60 * 1000;
+
+    const bookedEndWithBreak = new Date(resEnd.getTime() + breakMs);
+
+    // 1️⃣ GET ORIGINAL SLOT (source initiale)
     const original = await calendar.events.get({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
       eventId
@@ -117,9 +145,6 @@ app.post('/appointments', async (req, res) => {
     const originalStart = new Date(original.data.start.dateTime);
     const originalEnd = new Date(original.data.end.dateTime);
 
-    const resStart = new Date(start);
-    const resEnd = new Date(end);
-
     if (resStart < originalStart || resEnd > originalEnd) {
       return res.status(400).json({
         success: false,
@@ -127,6 +152,53 @@ app.post('/appointments', async (req, res) => {
       });
     }
 
+    // ======================================================
+    // 2️⃣ 🔥 RE-CHECK GOOGLE CALENDAR (SOURCE OF TRUTH)
+    // ======================================================
+    const freshEvent = await calendar.events.get({
+      calendarId: process.env.GOOGLE_CALENDAR_ID,
+      eventId
+    });
+
+    if (!freshEvent.data || freshEvent.data.status === "cancelled") {
+      return res.status(409).json({
+        success: false,
+        message: "Ce créneau n'est plus disponible."
+      });
+    }
+
+    // ======================================================
+    // 3️⃣ 🔥 GLOBAL OVERLAP CHECK (ANTI DOUBLE BOOKING)
+    // ======================================================
+    const existingEvents = await calendar.events.list({
+      calendarId: process.env.GOOGLE_CALENDAR_ID,
+      timeMin: resStart.toISOString(),
+      timeMax: resEnd.toISOString(),
+      singleEvents: true
+    });
+
+    const hasConflict = existingEvents.data.items.some(ev => {
+      const evStart = new Date(ev.start.dateTime || ev.start.date);
+      const evEnd = new Date(ev.end.dateTime || ev.end.date);
+
+      const overlap =
+        resStart < evEnd && resEnd > evStart;
+
+      const isBooked = ev.transparency !== "transparent";
+
+      return overlap && isBooked;
+    });
+
+    if (hasConflict) {
+      return res.status(409).json({
+        success: false,
+        message: "Quelqu'un a déjà réservé ce créneau."
+      });
+    }
+
+    // ======================================================
+    // 4️⃣ SPLIT LOGIC
+    // ======================================================
     const eventsToCreate = [];
 
     if (resStart > originalStart) {
@@ -143,28 +215,32 @@ app.post('/appointments', async (req, res) => {
       summary: title || "BOOKED",
       description: description || "",
       start: { dateTime: resStart.toISOString() },
-      end: { dateTime: resEnd.toISOString() },
+      end: { dateTime: bookedEndWithBreak.toISOString() }, // 👈 ici
       transparency: "opaque",
       colorId: 5,
       extendedProperties: {
         private: {
           type: "BOOKED",
           email,
-          phone
+          phone,
+          breakMinute: breakMinute || 0
         }
       }
     });
 
-    if (resEnd < originalEnd) {
+    if (bookedEndWithBreak < originalEnd) {
       eventsToCreate.push({
         summary: "AVAILABLE",
-        start: { dateTime: resEnd.toISOString() },
+        start: { dateTime: bookedEndWithBreak.toISOString() },
         end: { dateTime: originalEnd.toISOString() },
         transparency: "transparent",
         colorId: 2
       });
     }
 
+    // ======================================================
+    // 5️⃣ CREATE EVENTS
+    // ======================================================
     const createdEvents = [];
 
     for (const ev of eventsToCreate) {
@@ -176,6 +252,9 @@ app.post('/appointments', async (req, res) => {
       createdEvents.push(created.data);
     }
 
+    // ======================================================
+    // 6️⃣ DELETE ORIGINAL SLOT
+    // ======================================================
     await calendar.events.delete({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
       eventId
@@ -183,7 +262,7 @@ app.post('/appointments', async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Reservation créée avec split",
+      message: "Reservation créée avec split sécurisé",
       created: createdEvents.map(e => e.id)
     });
 
@@ -194,6 +273,9 @@ app.post('/appointments', async (req, res) => {
       success: false,
       message: "Erreur lors du split de réservation."
     });
+
+  } finally {
+    releaseLock(eventId);
   }
 });
 

@@ -35,7 +35,7 @@ const EYELASH_TYPES = [
         "Un style plus fourni grâce à plusieurs extensions sur un cil naturel.",
         '/photos/volume.jpeg',
         80,
-        '4h',
+        '1h30',
         20
     ),
 

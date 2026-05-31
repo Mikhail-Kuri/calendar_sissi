@@ -201,7 +201,8 @@ const MonthlyCalendarWithSlots = () => {
             email: formData.email,
             message: formData.message,
             service: currentService,
-            type: currentType
+            type: currentType,
+            breakMinute: breakMinutes
             };
 
             const res = await fetch("http://localhost:5000/appointments ", {
