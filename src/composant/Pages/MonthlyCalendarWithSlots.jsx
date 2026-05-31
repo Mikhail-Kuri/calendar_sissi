@@ -191,53 +191,42 @@ const MonthlyCalendarWithSlots = () => {
         }
 
         setIsSubmitting(true);
-        setErrorMessage("");
-        setSuccessMessage("");
 
         try {
             const payload = {
-                date: formatDateLocal(selectedDate),
-                phone: formData.phone,
-                email: formData.email,
-                message: formData.message,
-                service: currentService,
-                type: currentType,
-                duration: duration,
-                breakMinutes: breakMinutes,
-                deposit: deposit,
-                eventId: formData.start.eventId,
-                end: formData.start.end,
-                start: formData.start.start
+            eventId: formData.start.eventId,
+            start: formData.start.start,
+            end: formData.start.end,
+            phone: formData.phone,
+            email: formData.email,
+            message: formData.message,
+            service: currentService,
+            type: currentType
             };
 
-            console.log("RÉSERVATION :", payload);
+            const res = await fetch("http://localhost:5000/appointments ", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+            });
 
-            // 🔥 ICI plus tard POST backend
-            // await fetch("/api/reservation", { method: "POST", body: JSON.stringify(payload) })
+            const data = await res.json();
 
-            await new Promise(res => setTimeout(res, 800)); // simulation API
+            if (!data.success) throw new Error(data.message);
 
             setSuccessMessage("Réservation confirmée 🎉");
 
-            await new Promise(res => setTimeout(res, 1000))
-
-            setSuccessMessage(null);
-            // reset form
-            setFormData({
-                phone: "",
-                email: "",
-                message: "",
-                start: ""
-            });
-
+            // reset UI
+            setFormData({ phone: "", email: "", message: "", start: "" });
             setShowModal(false);
-            setSelectedDate(null);
-            setAvailableSlots([]);
 
-        } catch (err) {
-            console.error(err);
+        }
+        catch (err) {
             setErrorMessage("Erreur lors de la réservation.");
-        } finally {
+        } 
+        finally {
             setIsSubmitting(false);
         }
     };

@@ -100,34 +100,103 @@ app.get('/appointments', async (req, res) => {
 
 app.post('/appointments', async (req, res) => {
   try {
-    const { title, description, start, end } = req.body;
+    const { eventId, title, description, start, end, email, phone } = req.body;
 
-    if (!title || !start) {
-      return res.status(400).json({ success: false, message: "Le titre et la date de début sont obligatoires." });
+    if (!eventId || !start || !end) {
+      return res.status(400).json({
+        success: false,
+        message: "eventId, start et end sont obligatoires."
+      });
     }
 
-    const event = {
-      summary: title,
-      description,
-      start: { dateTime: start, timeZone: 'America/Toronto' },
-      end: { dateTime: end, timeZone: 'America/Toronto' },
-      status:"tentative",
-      colorId: 5
-    };
-
-    const response = await calendar.events.insert({
+    const original = await calendar.events.get({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
-      requestBody: event
+      eventId
     });
 
-    res.status(200).json({ success: true, eventId: response.data.id });
+    const originalStart = new Date(original.data.start.dateTime);
+    const originalEnd = new Date(original.data.end.dateTime);
+
+    const resStart = new Date(start);
+    const resEnd = new Date(end);
+
+    if (resStart < originalStart || resEnd > originalEnd) {
+      return res.status(400).json({
+        success: false,
+        message: "La réservation est hors du slot disponible."
+      });
+    }
+
+    const eventsToCreate = [];
+
+    if (resStart > originalStart) {
+      eventsToCreate.push({
+        summary: "AVAILABLE",
+        start: { dateTime: originalStart.toISOString() },
+        end: { dateTime: resStart.toISOString() },
+        transparency: "transparent",
+        colorId: 2
+      });
+    }
+
+    eventsToCreate.push({
+      summary: title || "BOOKED",
+      description: description || "",
+      start: { dateTime: resStart.toISOString() },
+      end: { dateTime: resEnd.toISOString() },
+      transparency: "opaque",
+      colorId: 5,
+      extendedProperties: {
+        private: {
+          type: "BOOKED",
+          email,
+          phone
+        }
+      }
+    });
+
+    if (resEnd < originalEnd) {
+      eventsToCreate.push({
+        summary: "AVAILABLE",
+        start: { dateTime: resEnd.toISOString() },
+        end: { dateTime: originalEnd.toISOString() },
+        transparency: "transparent",
+        colorId: 2
+      });
+    }
+
+    const createdEvents = [];
+
+    for (const ev of eventsToCreate) {
+      const created = await calendar.events.insert({
+        calendarId: process.env.GOOGLE_CALENDAR_ID,
+        requestBody: ev
+      });
+
+      createdEvents.push(created.data);
+    }
+
+    await calendar.events.delete({
+      calendarId: process.env.GOOGLE_CALENDAR_ID,
+      eventId
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Reservation créée avec split",
+      created: createdEvents.map(e => e.id)
+    });
+
   } catch (error) {
-    console.error('Erreur Google Calendar création:', error);
-    res.status(500).json({ success: false, message: 'Erreur lors de l’ajout à Google Calendar.' });
+    console.error("Erreur split appointment:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Erreur lors du split de réservation."
+    });
   }
 });
 
-// Route pour modifier un rendez-vous
 app.put('/appointments/:id', async (req, res) => {
   try {
     const eventId = req.params.id;
