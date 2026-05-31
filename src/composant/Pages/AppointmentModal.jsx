@@ -99,7 +99,7 @@ export function AppointmentModal({
                     <button
                         type="button"
                         className="button"
-                        disabled={!isFormValid() || isSubmitting}
+                        disabled={!isFormValid || isSubmitting}
                         onClick={handleSubmit}
                     >
                         {isSubmitting

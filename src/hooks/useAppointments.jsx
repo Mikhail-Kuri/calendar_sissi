@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import {isPastMonth,toUTCStart,toUTCEnd,getMonthDays,formatDateLocal} from "../utils/calendarUtils"
+import {isPastMonth,toUTCStart,toUTCEnd} from "../utils/calendarUtils"
 import { fetchAppointments } from "../services/fetcher/fetchAppointments";
 
 

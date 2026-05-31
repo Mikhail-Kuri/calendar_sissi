@@ -11,18 +11,17 @@ import {getMinFromHours,generateSlots,isDayBusy} from "../../utils/slotUtils"
 import {useAppointments} from "../../hooks/useAppointments"
 import {AvailableSlots} from "../Pages/AvailableSlots"
 import {AppointmentModal} from "../Pages/AppointmentModal"
-
 import e from "cors";
-import FullCalendar from "@fullcalendar/react";
+
+// import FullCalendar from "@fullcalendar/react";
 
 
-const slotTemplates = [
-    "09:00 - 11:00",
-    "11:30 - 13:30",
-    "14:00 - 16:00",
-    "16:30 - 18:30"
-];
-
+// const slotTemplates = [
+//     "09:00 - 11:00",
+//     "11:30 - 13:30",
+//     "14:00 - 16:00",
+//     "16:30 - 18:30"
+// ];
 
 
 const MonthlyCalendarWithSlots = () => {
@@ -53,6 +52,8 @@ const MonthlyCalendarWithSlots = () => {
         start: '',
         duration: ''
     });
+
+    const formValid = isFormValid(formData);
 
     const {
         eventsCache,
@@ -103,11 +104,7 @@ const MonthlyCalendarWithSlots = () => {
 
     const calendarDays = getMonthDays(currentMonth, currentYear);
 
-    const unavailableSlots = {
-            "2026-05-25": ["11:30 - 13:30", "16:30 - 18:30"],
-            "2026-05-26": ["09:00 - 11:00"]
-        };
-
+    const unavailableSlots = {};
 
     function isSlotUnavailable(slot) {
         if (!selectedDate) return false;
@@ -188,7 +185,7 @@ const MonthlyCalendarWithSlots = () => {
     }
 
     const handleSubmit = async () => {
-        if (!isFormValid()) {
+        if (!isFormValid(formData)) {
             setErrorMessage("Veuillez remplir correctement le formulaire.");
             return;
         }
@@ -263,8 +260,6 @@ const MonthlyCalendarWithSlots = () => {
         const isLoading = loadingMonths[key];
         const isBusy = !isPast && isDayBusy(date, monthEvents,duration);
         const isClickable = !isPast && date && !isLoading && isBusy;
-
-
 
         return (
             <div
@@ -349,7 +344,7 @@ return (
                 errorMessage={errorMessage}
                 successMessage={successMessage}
                 isSubmitting={isSubmitting}
-                isFormValid={isFormValid}
+                isFormValid={formValid}
                 handleSubmit={handleSubmit}
                 setShowModal={setShowModal}
             />
