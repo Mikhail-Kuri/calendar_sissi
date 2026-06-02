@@ -1,9 +1,10 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import { google } from "googleapis";
-
+import dotenv from "dotenv";
 dotenv.config();
+import { sendConfirmationEmail } from "../src/services/mail/sendConfirmationEmail.js";
+
 const app = express();
 
 const locks = new Map();
@@ -257,6 +258,14 @@ app.post("/appointments", async (req, res) => {
 
       createdEvents.push(created.data);
     }
+
+    // 🔥 EMAIL AFTER SUCCESSFUL BOOKING
+    console.log(email);
+    sendConfirmationEmail({
+      email,
+      start: resStart,
+      end: bookedEndWithBreak,
+    }).catch((err) => console.error("Email failed:", err));
 
     // ======================================================
     // 6️⃣ DELETE ORIGINAL SLOT
