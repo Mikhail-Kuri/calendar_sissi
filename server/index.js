@@ -1,8 +1,12 @@
+import dotenv from "dotenv";
+dotenv.config({ path: "../.env" });
+
+console.log("✅ RESEND:", process.env.RESEND_API_KEY);
+
 import express from "express";
 import cors from "cors";
 import { google } from "googleapis";
-import dotenv from "dotenv";
-dotenv.config();
+
 import { sendConfirmationEmail } from "../src/services/mail/sendConfirmationEmail.js";
 
 const app = express();
@@ -59,7 +63,8 @@ app.use(express.json());
 if (
   !process.env.GOOGLE_PRIVATE_KEY ||
   !process.env.GOOGLE_CLIENT_EMAIL ||
-  !process.env.GOOGLE_CALENDAR_ID
+  !process.env.GOOGLE_CALENDAR_ID ||
+  !process.env.RESEND_API_KEY
 ) {
   console.error(
     "❌ Veuillez définir GOOGLE_PRIVATE_KEY, GOOGLE_CLIENT_EMAIL et GOOGLE_CALENDAR_ID dans le .env",
@@ -264,7 +269,7 @@ app.post("/appointments", async (req, res) => {
     sendConfirmationEmail({
       email,
       start: resStart,
-      end: bookedEndWithBreak,
+      end: resEnd,
     }).catch((err) => console.error("Email failed:", err));
 
     // ======================================================
@@ -325,7 +330,7 @@ app.put("/appointments/:id", async (req, res) => {
 });
 
 // Démarrage du serveur
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Serveur en ligne sur http://localhost:${PORT}`);
 });

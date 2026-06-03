@@ -227,7 +227,7 @@ const MonthlyCalendarWithSlots = () => {
 
       setFormData({ phone: "", email: "", message: "", start: "" });
     } catch (err) {
-      setErrorMessage("Erreur lors de la réservation.  " + err.time);
+      setErrorMessage("Erreur lors de la réservation.  " + err.message);
       setModalState("idle");
     } finally {
       setIsSubmitting(false);
