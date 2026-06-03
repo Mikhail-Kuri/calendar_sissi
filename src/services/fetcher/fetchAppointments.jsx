@@ -2,10 +2,10 @@ export const fetchAppointments = async (from, to,duration) => {
     try {
 
        
-        const url = new URL("http://localhost:5000/appointments");
+        //const url = new URL("http://localhost:5000/appointments");
 
-        // const url = new URL(
-        // "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments");
+         const url = new URL(
+         "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments");
 
         if (from) url.searchParams.append("from", from);
         if (to) url.searchParams.append("to", to);

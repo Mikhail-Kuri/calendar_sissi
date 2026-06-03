@@ -201,13 +201,26 @@ const MonthlyCalendarWithSlots = () => {
         breakMinute: breakMinutes,
       };
 
-      const res = await fetch("http://localhost:5000/appointments ", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+
+
+      //const res = await fetch("http://localhost:5000/appointments ", {
+       // method: "POST",
+       // headers: {
+         // "Content-Type": "application/json",
+       // },
+      //  body: JSON.stringify(payload),
+     // });
 
       const data = await res.json();
 
