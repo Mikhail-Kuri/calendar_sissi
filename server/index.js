@@ -225,7 +225,7 @@ app.post("/appointments", async (req, res) => {
 
     eventsToCreate.push({
       summary: title || "BOOKED",
-      description: description || "",
+      description: `📧 Email: ${email}\n📞 Téléphone: ${phone}\n\n${description || ""}`,
       start: { dateTime: resStart.toISOString() },
       end: { dateTime: bookedEndWithBreak.toISOString() }, // 👈 ici
       transparency: "opaque",
@@ -265,12 +265,12 @@ app.post("/appointments", async (req, res) => {
     }
 
     // 🔥 EMAIL AFTER SUCCESSFUL BOOKING
-    console.log(email);
-    sendConfirmationEmail({
-      email,
-      start: resStart,
-      end: resEnd,
-    }).catch((err) => console.error("Email failed:", err));
+    // console.log(email);
+    // sendConfirmationEmail({
+    //   email,
+    //   start: resStart,
+    //   end: resEnd,
+    // }).catch((err) => console.error("Email failed:", err));
 
     // ======================================================
     // 6️⃣ DELETE ORIGINAL SLOT
