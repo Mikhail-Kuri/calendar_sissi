@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./CSS/MonthlyCalendarWithSlots.css";
-import Navbar from "../NAV/Navbar";
+import Navbar from "../../composant/NAV/Navbar";
 import { SlActionRedo } from "react-icons/sl";
 import { SlActionUndo } from "react-icons/sl";
 import { isFormValid } from "../../utils/validators";
@@ -12,8 +12,8 @@ import {
   isDayBusy,
 } from "../../utils/slotUtils";
 import { useAppointments } from "../../hooks/useAppointments";
-import { AvailableSlots } from "../Pages/AvailableSlots";
-import { AppointmentModal } from "../Pages/AppointmentModal";
+import { AvailableSlots } from "../../composant/Pages/AvailableSlots";
+import { AppointmentModal } from "../../composant/Pages/AppointmentModal";
 
 // import FullCalendar from "@fullcalendar/react";
 
@@ -46,14 +46,14 @@ const MonthlyCalendarWithSlots = () => {
   const slotsRef = useRef(null);
 
   // Ajouter dans ton state existant
-const [step, setStep] = useState("form");      // "form" | "verify" | "success"
-const [token, setToken] = useState(null);
-const [verificationCode, setVerificationCode] = useState("");
+  const [step, setStep] = useState("form"); // "form" | "verify" | "success"
+  const [token, setToken] = useState(null);
+  const [verificationCode, setVerificationCode] = useState("");
 
   const [formData, setFormData] = useState({
     phone: "",
     email: "",
-    emailConfirm: "",
+    confirmationEmail: "",
     message: "",
     start: "",
     duration: "",
@@ -184,123 +184,101 @@ const [verificationCode, setVerificationCode] = useState("");
   }
 
   // ÉTAPE 1 — Soumettre le formulaire → recevoir le token
-const handleRequest = async () => {
-  if (!isFormValid(formData)) {
-    setErrorMessage("Veuillez remplir correctement le formulaire.");
-    return;
-  }
+  const handleRequest = async () => {
+    if (!isFormValid(formData)) {
+      setErrorMessage("Veuillez remplir correctement le formulaire.");
+      return;
+    }
 
-  setIsSubmitting(true);
-  setModalState("loading");
+    setIsSubmitting(true);
+    setModalState("loading");
 
-  try {
-    const payload = {
-      eventId: formData.start.eventId,
-      start: formData.start.start,
-      end: formData.start.end,
-      phone: formData.phone,
-      email: formData.email,
-      message: formData.message,
-      service: currentService,
-      type: currentType,
-      breakMinute: breakMinutes,
-    };
+    try {
+      const payload = {
+        eventId: formData.start.eventId,
+        start: formData.start.start,
+        end: formData.start.end,
+        phone: formData.phone,
+        email: formData.email,
+        message: formData.message,
+        service: currentService,
+        type: currentType,
+        breakMinute: breakMinutes,
+      };
 
-    const res = await fetch(
-      "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments/request",
-      {
+      const urlLocalRequest = "http://localhost:5000/appointments/request";
+      const urlCodeSpaceRequest =
+        "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments/request";
+
+      const res = await fetch(urlLocalRequest, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
-      }
-    );
+      });
 
-<<<<<<< HEAD
-      // const res = await fetch(
-      //   "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(payload),
-      //   }
-      // );
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
 
-      const res = await fetch("http://localhost:5000/appointments ", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify(payload),
-     });
-=======
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message);
+      // ✅ Stocker le token et passer à l'étape vérification
+      setToken(data.token);
+      setStep("verify");
+      setModalState("idle");
+    } catch (err) {
+      setErrorMessage("Erreur lors de la demande : " + err.message);
+      setModalState("idle");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-    // ✅ Stocker le token et passer à l'étape vérification
-    setToken(data.token);
-    setStep("verify");
-    setModalState("idle");
+  // ÉTAPE 2 — Soumettre le code → créer le rendez-vous
+  const handleConfirm = async () => {
+    if (!verificationCode || verificationCode.length !== 6) {
+      setErrorMessage("Veuillez entrer le code à 6 chiffres.");
+      return;
+    }
 
-  } catch (err) {
-    setErrorMessage("Erreur lors de la demande : " + err.message);
-    setModalState("idle");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    setIsSubmitting(true);
+    setModalState("loading");
 
-// ÉTAPE 2 — Soumettre le code → créer le rendez-vous
-const handleConfirm = async () => {
-  if (!verificationCode || verificationCode.length !== 6) {
-    setErrorMessage("Veuillez entrer le code à 6 chiffres.");
-    return;
-  }
->>>>>>> 3d15ffa34a4b2e90ace61f33fd940f39773dcb17
+    try {
+      const urlLocalConfirm = "http://localhost:5000/appointments/confirm";
+      const urlCodeSpaceConfirm =
+        "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments/confirm";
 
-  setIsSubmitting(true);
-  setModalState("loading");
-
-  try {
-    const res = await fetch(
-      "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments/confirm",
-      {
+      const res = await fetch(urlLocalConfirm, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, code: verificationCode }),
-      }
-    );
+      });
 
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message);
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message);
 
-    // ✅ Succès — même logique qu'avant
-    setSelectedDate(null);
-    setModalState("success");
+      // ✅ Succès — même logique qu'avant
+      setSelectedDate(null);
+      setModalState("success");
 
-    await loadMonth(currentYear, currentMonth, { force: true });
-    const next = new Date(currentYear, currentMonth + 1, 1);
-    await loadMonth(next.getFullYear(), next.getMonth(), { force: true });
+      await loadMonth(currentYear, currentMonth, { force: true });
+      const next = new Date(currentYear, currentMonth + 1, 1);
+      await loadMonth(next.getFullYear(), next.getMonth(), { force: true });
 
-    setTimeout(() => {
-      setShowModal(false);
+      setTimeout(() => {
+        setShowModal(false);
+        setModalState("idle");
+        setStep("form");
+        setToken(null);
+        setVerificationCode("");
+      }, 2500);
+
+      setFormData({ phone: "", email: "", message: "", start: "" });
+    } catch (err) {
+      setErrorMessage("Code invalide ou expiré : " + err.message);
       setModalState("idle");
-      setStep("form");
-      setToken(null);
-      setVerificationCode("");
-    }, 2500);
-
-    setFormData({ phone: "", email: "", message: "", start: "" });
-
-  } catch (err) {
-    setErrorMessage("Code invalide ou expiré : " + err.message);
-    setModalState("idle");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   function handleAfterSuccses() {}
 
@@ -411,10 +389,10 @@ const handleConfirm = async () => {
           successMessage={successMessage}
           isSubmitting={isSubmitting}
           isFormValid={formValid}
-          handleRequest={handleRequest}         // ✅ étape 1
-          handleConfirm={handleConfirm}         // ✅ étape 2
-          step={step}                           // ✅ "form" | "verify"
-          verificationCode={verificationCode}   // ✅ valeur du code
+          handleRequest={handleRequest} // ✅ étape 1
+          handleConfirm={handleConfirm} // ✅ étape 2
+          step={step} // ✅ "form" | "verify"
+          verificationCode={verificationCode} // ✅ valeur du code
           setVerificationCode={setVerificationCode} // ✅ onChange
           setShowModal={setShowModal}
         />
