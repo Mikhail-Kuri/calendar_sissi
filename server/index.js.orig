@@ -337,7 +337,7 @@ app.post("/appointments/confirm", async (req, res) => {
 
     eventsToCreate.push({
       summary: title || "BOOKED",
-      description: description || "",
+      description: `📧 Email: ${email}\n📞 Téléphone: ${phone}\n\n${description || ""}`,
       start: { dateTime: resStart.toISOString() },
       end: { dateTime: bookedEndWithBreak.toISOString() },
       transparency: "opaque",
@@ -373,6 +373,15 @@ app.post("/appointments/confirm", async (req, res) => {
       createdEvents.push(created.data);
     }
 
+<<<<<<< HEAD
+    // 🔥 EMAIL AFTER SUCCESSFUL BOOKING
+    // console.log(email);
+    // sendConfirmationEmail({
+    //   email,
+    //   start: resStart,
+    //   end: resEnd,
+    // }).catch((err) => console.error("Email failed:", err));
+=======
     // 6️⃣ DELETE ORIGINAL SLOT
     await calendar.events.delete({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
@@ -385,6 +394,7 @@ app.post("/appointments/confirm", async (req, res) => {
       start: resStart,
       end: resEnd,
     }).catch((err) => console.error("Email failed:", err));
+>>>>>>> 3d15ffa34a4b2e90ace61f33fd940f39773dcb17
 
     return res.status(200).json({
       success: true,

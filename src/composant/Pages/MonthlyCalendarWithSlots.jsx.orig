@@ -53,6 +53,7 @@ const [verificationCode, setVerificationCode] = useState("");
   const [formData, setFormData] = useState({
     phone: "",
     email: "",
+    emailConfirm: "",
     message: "",
     start: "",
     duration: "",
@@ -214,6 +215,26 @@ const handleRequest = async () => {
       }
     );
 
+<<<<<<< HEAD
+      // const res = await fetch(
+      //   "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(payload),
+      //   }
+      // );
+
+      const res = await fetch("http://localhost:5000/appointments ", {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/json",
+       },
+       body: JSON.stringify(payload),
+     });
+=======
     const data = await res.json();
     if (!data.success) throw new Error(data.message);
 
@@ -236,6 +257,7 @@ const handleConfirm = async () => {
     setErrorMessage("Veuillez entrer le code à 6 chiffres.");
     return;
   }
+>>>>>>> 3d15ffa34a4b2e90ace61f33fd940f39773dcb17
 
   setIsSubmitting(true);
   setModalState("loading");
