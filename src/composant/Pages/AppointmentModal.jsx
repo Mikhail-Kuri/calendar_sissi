@@ -1,6 +1,5 @@
-import {formatPhoneNumber, isFormValid} from "../../utils/validators";
-import "./CSS/AppointmentModal.css"
-
+import { formatPhoneNumber } from "../../utils/validators";
+import "./CSS/AppointmentModal.css";
 
 export function AppointmentModal({
     modalState,
@@ -11,7 +10,11 @@ export function AppointmentModal({
     successMessage,
     isSubmitting,
     isFormValid,
-    handleSubmit,
+    handleRequest,
+    handleConfirm,
+    step,
+    verificationCode,
+    setVerificationCode,
     setShowModal
 }) {
     if (!showModal) return null;
@@ -27,7 +30,6 @@ export function AppointmentModal({
         <div className="modalOverlay">
             <div className="modalContent">
 
-                {/* LOADING STATE */}
                 {modalState === "loading" && (
                     <div className="modalCenter">
                         <div className="spinner" />
@@ -35,7 +37,6 @@ export function AppointmentModal({
                     </div>
                 )}
 
-                {/* SUCCESS STATE */}
                 {modalState === "success" && (
                     <div className="modalCenter success">
                         <h2>🎉 Réservation confirmée</h2>
@@ -44,8 +45,7 @@ export function AppointmentModal({
                     </div>
                 )}
 
-                {/* FORM STATE */}
-                {modalState === "idle" && (
+                {modalState === "idle" && step === "form" && (
                     <>
                         <h2 className="modalTitle">
                             📌 Informations du rendez-vous
@@ -57,7 +57,10 @@ export function AppointmentModal({
                             className="input"
                             value={formData.phone}
                             onChange={(e) =>
-                                handleChange("phone", formatPhoneNumber(e.target.value))
+                                handleChange(
+                                    "phone",
+                                    formatPhoneNumber(e.target.value)
+                                )
                             }
                         />
 
@@ -85,7 +88,6 @@ export function AppointmentModal({
                         )}
 
                         <div className="modalActions">
-
                             <button
                                 type="button"
                                 className="button"
@@ -98,15 +100,63 @@ export function AppointmentModal({
                                 type="button"
                                 className="button"
                                 disabled={!isFormValid || isSubmitting}
-                                onClick={handleSubmit}
+                                onClick={handleRequest}
                             >
-                                {isSubmitting ? "Confirmation..." : "Réserver"}
+                                {isSubmitting
+                                    ? "Envoi..."
+                                    : "Recevoir le code"}
                             </button>
-
                         </div>
                     </>
                 )}
 
+                {modalState === "idle" && step === "verify" && (
+                    <>
+                        <h2 className="modalTitle">
+                            Vérification du code
+                        </h2>
+
+                        <p>
+                            Un code de vérification a été envoyé à votre adresse
+                            courriel.
+                        </p>
+
+                        <input
+                            type="text"
+                            className="input"
+                            placeholder="Code de vérification"
+                            value={verificationCode}
+                            onChange={(e) =>
+                                setVerificationCode(e.target.value)
+                            }
+                        />
+
+                        {errorMessage && (
+                            <p className="errorMessage">{errorMessage}</p>
+                        )}
+
+                        <div className="modalActions">
+                            <button
+                                type="button"
+                                className="button"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Annuler
+                            </button>
+
+                            <button
+                                type="button"
+                                className="button"
+                                disabled={isSubmitting}
+                                onClick={handleConfirm}
+                            >
+                                {isSubmitting
+                                    ? "Validation..."
+                                    : "Confirmer"}
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
         </div>
     );

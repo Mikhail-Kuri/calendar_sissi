@@ -45,6 +45,11 @@ const MonthlyCalendarWithSlots = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const slotsRef = useRef(null);
 
+  // Ajouter dans ton state existant
+const [step, setStep] = useState("form");      // "form" | "verify" | "success"
+const [token, setToken] = useState(null);
+const [verificationCode, setVerificationCode] = useState("");
+
   const [formData, setFormData] = useState({
     phone: "",
     email: "",
@@ -177,75 +182,103 @@ const MonthlyCalendarWithSlots = () => {
     );
   }
 
-  const handleSubmit = async () => {
-    if (!isFormValid(formData)) {
-      setErrorMessage("Veuillez remplir correctement le formulaire.");
-      return;
-    }
+  // ÉTAPE 1 — Soumettre le formulaire → recevoir le token
+const handleRequest = async () => {
+  if (!isFormValid(formData)) {
+    setErrorMessage("Veuillez remplir correctement le formulaire.");
+    return;
+  }
 
-    setIsSubmitting(true);
-    setModalState("loading");
+  setIsSubmitting(true);
+  setModalState("loading");
 
-    console.log(deposit);
+  try {
+    const payload = {
+      eventId: formData.start.eventId,
+      start: formData.start.start,
+      end: formData.start.end,
+      phone: formData.phone,
+      email: formData.email,
+      message: formData.message,
+      service: currentService,
+      type: currentType,
+      breakMinute: breakMinutes,
+    };
 
-    try {
-      const payload = {
-        eventId: formData.start.eventId,
-        start: formData.start.start,
-        end: formData.start.end,
-        phone: formData.phone,
-        email: formData.email,
-        message: formData.message,
-        service: currentService,
-        type: currentType,
-        breakMinute: breakMinutes,
-      };
+    const res = await fetch(
+      "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments/request",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
 
-      const res = await fetch(
-        "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
 
+    // ✅ Stocker le token et passer à l'étape vérification
+    setToken(data.token);
+    setStep("verify");
+    setModalState("idle");
 
+  } catch (err) {
+    setErrorMessage("Erreur lors de la demande : " + err.message);
+    setModalState("idle");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-      //const res = await fetch("http://localhost:5000/appointments ", {
-       // method: "POST",
-       // headers: {
-         // "Content-Type": "application/json",
-       // },
-      //  body: JSON.stringify(payload),
-     // });
+// ÉTAPE 2 — Soumettre le code → créer le rendez-vous
+const handleConfirm = async () => {
+  if (!verificationCode || verificationCode.length !== 6) {
+    setErrorMessage("Veuillez entrer le code à 6 chiffres.");
+    return;
+  }
 
-      const data = await res.json();
+  setIsSubmitting(true);
+  setModalState("loading");
 
-      if (!data.success) throw new Error(data.message);
+  try {
+    const res = await fetch(
+      "https://glorious-doodle-66jjjvvg7v7h5v9g-5000.app.github.dev/appointments/confirm",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, code: verificationCode }),
+      }
+    );
 
-      setSelectedDate(null);
-      setModalState("success");
-      const next = new Date(currentYear, currentMonth + 1, 1);
+    const data = await res.json();
+    if (!data.success) throw new Error(data.message);
 
-      await loadMonth(currentYear, currentMonth, { force: true });
-      await loadMonth(next.getFullYear(), next.getMonth(), { force: true });
+    // ✅ Succès — même logique qu'avant
+    setSelectedDate(null);
+    setModalState("success");
 
-      setTimeout(() => {
-        setShowModal(false);
-        setModalState("idle");
-      }, 2500);
+    await loadMonth(currentYear, currentMonth, { force: true });
+    const next = new Date(currentYear, currentMonth + 1, 1);
+    await loadMonth(next.getFullYear(), next.getMonth(), { force: true });
 
-      setFormData({ phone: "", email: "", message: "", start: "" });
-    } catch (err) {
-      setErrorMessage("Erreur lors de la réservation.  " + err.message);
+    setTimeout(() => {
+      setShowModal(false);
       setModalState("idle");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      setStep("form");
+      setToken(null);
+      setVerificationCode("");
+    }, 2500);
+
+    setFormData({ phone: "", email: "", message: "", start: "" });
+
+  } catch (err) {
+    setErrorMessage("Code invalide ou expiré : " + err.message);
+    setModalState("idle");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   function handleAfterSuccses() {}
 
@@ -345,7 +378,6 @@ const MonthlyCalendarWithSlots = () => {
         </div>
       </div>
 
-      {/* MODAL */}
       {showModal && (
         <AppointmentModal
           modalState={modalState}
@@ -353,10 +385,15 @@ const MonthlyCalendarWithSlots = () => {
           formData={formData}
           setFormData={setFormData}
           errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
           successMessage={successMessage}
           isSubmitting={isSubmitting}
           isFormValid={formValid}
-          handleSubmit={handleSubmit}
+          handleRequest={handleRequest}         // ✅ étape 1
+          handleConfirm={handleConfirm}         // ✅ étape 2
+          step={step}                           // ✅ "form" | "verify"
+          verificationCode={verificationCode}   // ✅ valeur du code
+          setVerificationCode={setVerificationCode} // ✅ onChange
           setShowModal={setShowModal}
         />
       )}
