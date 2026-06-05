@@ -380,11 +380,11 @@ app.post("/appointments/confirm", async (req, res) => {
     });
 
     // 🔥 EMAIL DE CONFIRMATION
-    sendConfirmationEmail({
-      email,
-      start: resStart,
-      end: resEnd,
-    }).catch((err) => console.error("Email failed:", err));
+    // sendConfirmationEmail({
+    //   email,
+    //   start: resStart,
+    //   end: resEnd,
+    // }).catch((err) => console.error("Email failed:", err));
 
     return res.status(200).json({
       success: true,

@@ -14,8 +14,8 @@ export function isFormValid(formData = {}) {
   return (
     (formData.phone || "").trim().length > 0 &&
     (formData.email || "").trim().length > 0 &&
-    (formData.emailConfirm || "").trim().length > 0 &&
-    isValidEmail(formData.emailConfirm) &&
+    (formData.confirmationEmail || "").trim().length > 0 &&
+    isValidEmail(formData.confirmationEmail) &&
     isValidEmail(formData.email || "") &&
     isValidPhone(formData.phone || "")
   );
