@@ -1,165 +1,314 @@
 :root {
-    --bg: #E6DDD0;
-    --primary: #C9A6A0;
-    --accent: #728365;
-    --accent-dark: #4F684B;
-    --text: #6A3E37;
+  --bg: #e6ddd0;
+  --primary: #c9a6a0;
+  --accent: #728365;
+  --accent-dark: #4f684b;
+  --text: #6a3e37;
 
-    --card: #f3ede4;
-    --white: #ffffff;
+  --card: #f3ede4;
+  --white: #ffffff;
 }
 
 body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    color: var(--text);
-    background-color: var(--bg);
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  color: var(--text);
+  background-color: var(--bg);
 }
 
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 
-    background-color: var(--card);
-    padding: 15px 30px;
+  background-color: var(--card);
+  padding: 15px 25px;
 
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-    border-bottom: 1px solid rgba(79, 104, 75, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(79, 104, 75, 0.15);
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--accent-dark);
-    letter-spacing: 1px;
+  font-size: 2vw;
+  font-weight: 700;
+  color: var(--accent-dark);
+  letter-spacing: 1px;
 }
 
 .nav-links a {
-    text-decoration: none;
-    color: var(--text);
-    font-weight: 500;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
 
-    margin-left: 20px;
-    transition: color 0.2s ease;
+  margin-left: 20px;
+  transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
-    color: var(--accent-dark);
+  color: var(--accent-dark);
 }
 
 .hero-section {
-    text-align: center;
-    padding: 70px 20px 50px;
+  text-align: center;
+  padding: 70px 20px 50px;
 }
 
 .hero-section h1 {
-    font-size: clamp(22px, 5vw, 34px);
-    margin-bottom: 20px;
-    color: var(--accent-dark);
-    font-weight: 700;
+  font-size: clamp(22px, 5vw, 34px);
+  margin-bottom: 20px;
+  color: var(--accent-dark);
+  font-weight: 700;
 }
 
 .btn-reserver {
-    background: var(--accent-dark);
-    color: white;
+  background: var(--accent-dark);
+  color: white;
 
-    padding: 14px 28px;
-    font-size: 16px;
-    font-weight: 600;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
 
-    border: none;
-    border-radius: 30px;
+  border: none;
+  border-radius: 30px;
 
-    cursor: pointer;
-    transition: all 0.25s ease;
+  cursor: pointer;
+  transition: all 0.25s ease;
 
-    box-shadow: 0 6px 16px rgba(79, 104, 75, 0.25);
+  box-shadow: 0 6px 16px rgba(79, 104, 75, 0.25);
 }
 
 .btn-reserver:hover {
-    background: var(--accent);
-    transform: translateY(-2px);
+  background: var(--accent);
+  transform: translateY(-2px);
 }
 
-
 .infos-section {
-    max-width: 850px;
-    margin: 0 auto;
+  max-width: 850px;
+  margin: 0 auto;
 
-    padding: 30px;
-    background-color: var(--card);
+  padding: 30px;
+  background-color: var(--card);
 
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
 }
 
 .infos-columns {
-    display: flex;
-    gap: 30px;
-    flex-wrap: wrap;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
 }
 
 .description {
-    flex: 2;
-    min-width: 280px;
+  flex: 2;
+  min-width: 280px;
 }
 
 .infos-section p {
-    margin-bottom: 15px;
-    line-height: 1.6;
-    font-size: 16px;
+  margin-bottom: 15px;
+  line-height: 1.6;
+  font-size: 16px;
 }
 
-.horaires, .contact {
-    margin-top: 30px;
-    text-align: left;
+.horaires,
+.contact {
+  margin-top: 30px;
+  text-align: left;
 }
 
 .horaires h3,
 .contact h3 {
-    color: var(--accent-dark);
-    margin-bottom: 10px;
+  color: var(--accent-dark);
+  margin-bottom: 10px;
 }
 
 .horaires ul {
-    list-style: none;
-    padding: 0;
-    font-size: 15px;
-}
-
-.contact p, .contact a {
-    margin: 4px 0;
-    font-size: 15px;
-}
-
-.infos-side {
-    flex: 1;
-    min-width: 250px;
-
-    background-color: rgba(201, 166, 160, 0.15);
-    padding: 20px;
-
-    border-radius: 15px;
-}
-
-.infos-side h3 {
-    margin-bottom: 10px;
-    color: var(--accent-dark);
-}
-
-.horaires ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    font-size: 14px;
-    line-height: 1.6;
+  list-style: none;
+  padding: 0;
+  font-size: 15px;
 }
 
 .contact p,
 .contact a {
-    font-size: 14px;
-    margin: 5px 0;
-    color: var(--text);
+  margin: 4px 0;
+  font-size: 15px;
 }
 
+.infos-side {
+  flex: 1;
+  min-width: 250px;
+
+  background-color: rgba(201, 166, 160, 0.15);
+  padding: 20px;
+
+  border-radius: 15px;
+}
+
+.infos-side h3 {
+  margin-bottom: 10px;
+  color: var(--accent-dark);
+}
+
+.horaires ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.contact p,
+.contact a {
+  font-size: 14px;
+  margin: 5px 0;
+  color: var(--text);
+}
+
+.availability-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  padding: 14px 20px;
+  margin-bottom: 20px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+
+  color: white;
+  font-weight: 700;
+  font-size: 18px;
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  animation:
+    floatBanner 3s ease-in-out infinite,
+    glowBanner 2s ease-in-out infinite;
+
+  transition: transform 0.2s ease;
+}
+
+.availability-banner:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.pulse-dot {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+  background: #fff;
+
+  animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.8);
+  }
+
+  70% {
+    transform: scale(1.2);
+    box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes floatBanner {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes glowBanner {
+  0%,
+  100% {
+    box-shadow: 0 10px 30px rgba(79, 104, 75, 0.25);
+  }
+
+  50% {
+    box-shadow: 0 15px 40px rgba(79, 104, 75, 0.45);
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+
+  transition: background 0.25s ease;
+}
+
+.modal-overlay.active {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 420px;
+
+  transform: scale(0.85);
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+.modal-content.active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.tab-content {
+  animation: fadeTab 0.3s ease;
+}
+
+@keyframes fadeTab {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.availability-banner.active-tab {
+  opacity: 1;
+  box-shadow: 0 15px 40px rgba(79, 104, 75, 0.45);
+}
+
+.availability-banner:not(.active-tab) {
+  opacity: 0.7;
+}

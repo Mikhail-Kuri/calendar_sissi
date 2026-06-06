@@ -5,7 +5,7 @@ import './CSS/Navbar.css';
 export default function Navbar() {
     return (
         <nav className="navbar">
-            <div className="logo">Cicilsignature</div>
+            <div className="logo">SISSI SIGNATUTRE</div>
             <div className="nav-links">
                 <Link to="/">Accueil</Link>
                 {/* Tu peux ajouter d'autres liens ici */}

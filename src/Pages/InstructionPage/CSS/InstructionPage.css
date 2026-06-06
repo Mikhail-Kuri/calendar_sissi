@@ -1,0 +1,64 @@
+.instructionsWrapper {
+    min-height: calc(100vh - 80px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 30px;
+}
+
+.instructionsCard {
+    max-width: 700px;
+    width: 100%;
+
+    background: white;
+
+    border-radius: 20px;
+    padding: 35px;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
+    text-align: center;
+}
+
+.instructionsCard h1 {
+    color: var(--accent-dark);
+    margin-bottom: 10px;
+}
+
+.serviceInfo {
+    color: var(--text);
+    opacity: 0.8;
+    margin-bottom: 25px;
+}
+
+.instructionsCard h2 {
+    margin-bottom: 20px;
+    color: var(--accent-dark);
+}
+
+.instructionsCard ul {
+    text-align: left;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.continueBtn {
+    background: var(--accent-dark);
+    color: white;
+
+    border: none;
+    border-radius: 12px;
+
+    padding: 12px 20px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.continueBtn:hover {
+    transform: translateY(-2px);
+    background: var(--accent);
+}
