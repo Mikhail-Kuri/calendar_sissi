@@ -1,16 +1,45 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './CSS/Navbar.css';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./CSS/Navbar.css";
 
 export default function Navbar() {
-    return (
-        <nav className="navbar">
-            <div className="logo">SISSI SIGNATUTRE</div>
-            <div className="nav-links">
-                <Link to="/">Accueil</Link>
-                {/* Tu peux ajouter d'autres liens ici */}
-                <Link to="/calendar">Réserver</Link>
-            </div>
-        </nav>
-    );
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 700) setMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="logo">Sissi Signature</div>
+        <div className="nav-links">
+          <Link to="/">Accueil</Link>
+          <Link to="/calendar">Réserver</Link>
+        </div>
+        <button
+          className={`burger ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </nav>
+
+      <div className={`mobile-menu ${menuOpen ? "open" : ""}`}>
+        <Link to="/" onClick={() => setMenuOpen(false)}>
+          Accueil
+        </Link>
+        <Link to="/calendar" onClick={() => setMenuOpen(false)}>
+          Réserver
+        </Link>
+      </div>
+    </>
+  );
 }

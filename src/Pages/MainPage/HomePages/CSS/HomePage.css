@@ -9,44 +9,18 @@
   --white: #ffffff;
 }
 
+html,
 body {
+  overflow-x: hidden;
+  max-width: 100%;
   margin: 0;
   font-family: "Poppins", sans-serif;
   color: var(--text);
   background-color: var(--bg);
 }
 
-.navbar {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-
-  background-color: var(--card);
-  padding: 15px 25px;
-
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid rgba(79, 104, 75, 0.15);
-}
-
-.logo {
-  font-size: 2vw;
-  font-weight: 700;
-  color: var(--accent-dark);
-  letter-spacing: 1px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: var(--text);
-  font-weight: 500;
-
-  margin-left: 20px;
-  transition: color 0.2s ease;
-}
-
-.nav-links a:hover {
-  color: var(--accent-dark);
+* {
+  box-sizing: border-box;
 }
 
 .hero-section {

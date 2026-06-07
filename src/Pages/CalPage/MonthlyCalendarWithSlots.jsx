@@ -44,6 +44,7 @@ const MonthlyCalendarWithSlots = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const slotsRef = useRef(null);
+  const [showTip, setShowTip] = useState(false);
 
   // Ajouter dans ton state existant
   const [step, setStep] = useState("form"); // "form" | "verify" | "success"
@@ -337,6 +338,23 @@ const MonthlyCalendarWithSlots = () => {
         </div>
 
         <div className="calendar-container">
+          <div className="calendar-info-wrapper">
+            <button
+              className="info-btn"
+              onClick={() => setShowTip(!showTip)}
+              aria-label="Information sur les disponibilités"
+            >
+              !
+            </button>
+            {showTip && (
+              <div className="info-tooltip">
+                📅 Les disponibilités sont mises à jour le{" "}
+                <strong>25 de chaque mois</strong>. Pour un rendez-vous hors
+                créneaux, contactez-nous directement.
+              </div>
+            )}
+          </div>
+          
           {/* Navigation mois */}
           <div className="calendar-header">
             <button onClick={() => changeMonth(-1)}>

@@ -14,7 +14,7 @@
   font-size: 24px;
   font-weight: 700;
   color: #2d3d29;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   letter-spacing: 0.5px;
 }
 
@@ -59,8 +59,12 @@
   display: none;
 }
 
+.mobile-menu {
+  display: none;
+}
+
 /* ── MOBILE ── */
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .navbar {
     padding: 13px 16px;
     position: relative;
@@ -102,6 +106,7 @@
   }
 
   .mobile-menu {
+    display: block;
     background: #2d3d29;
     overflow: hidden;
     max-height: 0;
