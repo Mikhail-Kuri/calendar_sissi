@@ -16,7 +16,9 @@ export default function Navbar() {
   return (
     <>
       <nav className="navbar">
-        <div className="logo">Sissi Signature</div>
+        <Link to="/" className="logo">
+          Sissi Signature
+        </Link>
         <div className="nav-links">
           <Link to="/">Accueil</Link>
           <Link to="/calendar">Réserver</Link>

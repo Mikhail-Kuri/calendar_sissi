@@ -15,11 +15,10 @@ import { useAppointments } from "../../hooks/useAppointments";
 import { AvailableSlots } from "../../composant/Pages/AvailableSlots";
 import { AppointmentModal } from "../../composant/Pages/AppointmentModal";
 
-
 const MonthlyCalendarWithSlots = () => {
   const location = useLocation();
   const currentLash = location.state || {};
-  console.log(currentLash)
+  console.log(currentLash);
   const duration = getMinFromHours(currentLash.duration) || 180;
   const breakMinutes = 15;
   const currentService = currentLash.service || "lashes";
@@ -37,7 +36,6 @@ const MonthlyCalendarWithSlots = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const slotsRef = useRef(null);
   const [showTip, setShowTip] = useState(false);
-
 
   const [step, setStep] = useState("form");
   const [token, setToken] = useState(null);
@@ -320,10 +318,16 @@ const MonthlyCalendarWithSlots = () => {
       <div>
         <Navbar />
 
-        <div className="calendar-header-header">
-          <h1>Réservation de rendez-vous</h1>
+        <header className="cal-hero">
+          {/* <div className="cal-hero-tag">
+            {currentService === "nails"
+              ? "Nail Tech certifiée"
+              : "Extensions de cils"}{" "}
+            · Sissi Signature
+          </div> */}
+          <h1>Réservation — {currentType}</h1>
           <p>Sélectionnez une date pour consulter les créneaux disponibles</p>
-        </div>
+        </header>
 
         <div className="calendar-container">
           <div className="calendar-info-wrapper">
@@ -342,7 +346,7 @@ const MonthlyCalendarWithSlots = () => {
               </div>
             )}
           </div>
-          
+
           <div className="calendar-header">
             <button onClick={() => changeMonth(-1)}>
               <SlActionUndo />
@@ -393,11 +397,11 @@ const MonthlyCalendarWithSlots = () => {
           successMessage={successMessage}
           isSubmitting={isSubmitting}
           isFormValid={formValid}
-          handleRequest={handleRequest} 
-          handleConfirm={handleConfirm} 
-          step={step} 
-          verificationCode={verificationCode} 
-          setVerificationCode={setVerificationCode} 
+          handleRequest={handleRequest}
+          handleConfirm={handleConfirm}
+          step={step}
+          verificationCode={verificationCode}
+          setVerificationCode={setVerificationCode}
           setShowModal={setShowModal}
         />
       )}

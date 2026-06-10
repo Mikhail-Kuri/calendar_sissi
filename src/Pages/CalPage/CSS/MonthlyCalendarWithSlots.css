@@ -40,44 +40,51 @@ body {
   }
 }
 
-/* ── HEADER TITRE ── */
-.calendar-header-header {
+/* ── CAL HERO ─────────────────────────────────────── */
+
+.cal-hero {
+  background: linear-gradient(155deg, var(--sage) 0%, var(--sage-mid) 100%);
+  color: white;
   text-align: center;
-  margin-bottom: 24px;
+  padding: 44px 24px 36px;
 }
 
-.calendar-header-header h1 {
-  font-size: clamp(18px, 4vw, 26px);
+.cal-hero-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 11px;
   font-weight: 600;
-  color: var(--text-dark);
-  letter-spacing: -0.3px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 5px 14px;
+  margin-bottom: 14px;
 }
 
-.calendar-header-header p {
+.cal-hero h1 {
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 600;
+  color: white;
+  margin: 0 0 8px;
+  line-height: 1.25;
+}
+
+.cal-hero p {
   font-size: 14px;
-  color: var(--muted);
-  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.75);
+  margin: 0;
 }
 
 @media (max-width: 600px) {
-  .calendar-header-header {
-    background: var(--text-dark);
-    color: var(--text-light);
-    padding: 20px 16px 16px;
-    margin-bottom: 0;
+  .cal-hero {
+    padding: 32px 20px 28px;
   }
 
-  .calendar-header-header h1 {
-    color: var(--text-light);
-    font-size: 17px;
-  }
-
-  .calendar-header-header p {
-    color: #8aab7e;
-    font-size: 12px;
+  .cal-hero h1 {
+    font-size: 18px;
   }
 }
-
 /* ── NAVIGATION MOIS ── */
 .calendar-header {
   display: flex;

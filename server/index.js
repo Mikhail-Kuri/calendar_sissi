@@ -10,8 +10,11 @@ import { google } from "googleapis";
 
 import { sendConfirmationEmail } from "../src/services/mail/sendConfirmationEmail.js";
 import { sendVerificationEmail } from "../src/services/mail/sendVerificationEmail.js";
-import { saveCode, getCode, deleteCode } from "../src/services/mail/verificationStore.js";
-
+import {
+  saveCode,
+  getCode,
+  deleteCode,
+} from "../src/services/mail/verificationStore.js";
 
 const app = express();
 
@@ -129,7 +132,8 @@ app.get("/appointments", async (req, res) => {
 // 🔐 ÉTAPE 1 — Valider le slot + envoyer le code
 // ======================================================
 app.post("/appointments/request", async (req, res) => {
-  const { title, description, start, end, email, phone, breakMinute, eventId } = req.body;
+  const { title, description, start, end, email, phone, breakMinute, eventId } =
+    req.body;
 
   if (!eventId || !start || !end || !email) {
     return res.status(400).json({
@@ -182,7 +186,11 @@ app.post("/appointments/request", async (req, res) => {
     const hasConflict = existingEvents.data.items.some((ev) => {
       const evStart = new Date(ev.start.dateTime || ev.start.date);
       const evEnd = new Date(ev.end.dateTime || ev.end.date);
-      return resStart < evEnd && resEnd > evStart && ev.transparency !== "transparent";
+      return (
+        resStart < evEnd &&
+        resEnd > evStart &&
+        ev.transparency !== "transparent"
+      );
     });
 
     if (hasConflict) {
@@ -196,7 +204,17 @@ app.post("/appointments/request", async (req, res) => {
     const token = crypto.randomUUID();
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-    saveCode(token, { code, eventId, title, description, start, end, email, phone, breakMinute });
+    saveCode(token, {
+      code,
+      eventId,
+      title,
+      description,
+      start,
+      end,
+      email,
+      phone,
+      breakMinute,
+    });
 
     await sendVerificationEmail({ email, code });
 
@@ -205,7 +223,6 @@ app.post("/appointments/request", async (req, res) => {
       token,
       message: "Code envoyé à votre adresse email.",
     });
-
   } catch (error) {
     console.error("Erreur /appointments/request:", error);
     return res.status(500).json({
@@ -257,7 +274,8 @@ app.post("/appointments/confirm", async (req, res) => {
   deleteCode(token);
 
   // Reconstruire les variables depuis le store
-  const { eventId, title, description, start, end, email, phone, breakMinute } = pending;
+  const { eventId, title, description, start, end, email, phone, breakMinute } =
+    pending;
 
   if (!acquireLock(eventId)) {
     return res.status(409).json({
@@ -312,7 +330,11 @@ app.post("/appointments/confirm", async (req, res) => {
     const hasConflict = existingEvents.data.items.some((ev) => {
       const evStart = new Date(ev.start.dateTime || ev.start.date);
       const evEnd = new Date(ev.end.dateTime || ev.end.date);
-      return resStart < evEnd && resEnd > evStart && ev.transparency !== "transparent";
+      return (
+        resStart < evEnd &&
+        resEnd > evStart &&
+        ev.transparency !== "transparent"
+      );
     });
 
     if (hasConflict) {
@@ -391,7 +413,6 @@ app.post("/appointments/confirm", async (req, res) => {
       message: "Réservation créée avec succès.",
       created: createdEvents.map((e) => e.id),
     });
-
   } catch (error) {
     console.error("Erreur /appointments/confirm:", error);
     return res.status(500).json({
