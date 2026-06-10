@@ -63,7 +63,9 @@ export function AppointmentModal({
               value={formData.email}
               onChange={(e) => handleChange("email", e.target.value)}
             />
-            <label>Confirmation du Email *</label>
+
+            {/* 
+          <label>Confirmation du Email *</label>
             <input
               type="email"
               className="input"
@@ -72,6 +74,7 @@ export function AppointmentModal({
                 handleChange("confirmationEmail", e.target.value)
               }
             />
+            */}
             <label>Message (optionnel)</label>
             <textarea
               className="textarea"

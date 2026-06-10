@@ -15,18 +15,11 @@ import { useAppointments } from "../../hooks/useAppointments";
 import { AvailableSlots } from "../../composant/Pages/AvailableSlots";
 import { AppointmentModal } from "../../composant/Pages/AppointmentModal";
 
-// import FullCalendar from "@fullcalendar/react";
-
-// const slotTemplates = [
-//     "09:00 - 11:00",
-//     "11:30 - 13:30",
-//     "14:00 - 16:00",
-//     "16:30 - 18:30"
-// ];
 
 const MonthlyCalendarWithSlots = () => {
   const location = useLocation();
   const currentLash = location.state || {};
+  console.log(currentLash)
   const duration = getMinFromHours(currentLash.duration) || 180;
   const breakMinutes = 15;
   const currentService = currentLash.service || "lashes";
@@ -37,7 +30,6 @@ const MonthlyCalendarWithSlots = () => {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [selectedDate, setSelectedDate] = useState(null);
   const [availableSlots, setAvailableSlots] = useState([]);
-  // const [events, setEvents] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalState, setModalState] = useState("idle");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,8 +38,8 @@ const MonthlyCalendarWithSlots = () => {
   const slotsRef = useRef(null);
   const [showTip, setShowTip] = useState(false);
 
-  // Ajouter dans ton state existant
-  const [step, setStep] = useState("form"); // "form" | "verify" | "success"
+
+  const [step, setStep] = useState("form");
   const [token, setToken] = useState(null);
   const [verificationCode, setVerificationCode] = useState("");
 
@@ -184,7 +176,6 @@ const MonthlyCalendarWithSlots = () => {
     );
   }
 
-  // ÉTAPE 1 — Soumettre le formulaire → recevoir le token
   const handleRequest = async () => {
     if (!isFormValid(formData)) {
       setErrorMessage("Veuillez remplir correctement le formulaire.");
@@ -220,7 +211,6 @@ const MonthlyCalendarWithSlots = () => {
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      // ✅ Stocker le token et passer à l'étape vérification
       setToken(data.token);
       setStep("verify");
       setModalState("idle");
@@ -232,7 +222,6 @@ const MonthlyCalendarWithSlots = () => {
     }
   };
 
-  // ÉTAPE 2 — Soumettre le code → créer le rendez-vous
   const handleConfirm = async () => {
     if (!verificationCode || verificationCode.length !== 6) {
       setErrorMessage("Veuillez entrer le code à 6 chiffres.");
@@ -256,7 +245,6 @@ const MonthlyCalendarWithSlots = () => {
       const data = await res.json();
       if (!data.success) throw new Error(data.message);
 
-      // ✅ Succès — même logique qu'avant
       setSelectedDate(null);
       setModalState("success");
 
@@ -355,7 +343,6 @@ const MonthlyCalendarWithSlots = () => {
             )}
           </div>
           
-          {/* Navigation mois */}
           <div className="calendar-header">
             <button onClick={() => changeMonth(-1)}>
               <SlActionUndo />
@@ -383,7 +370,6 @@ const MonthlyCalendarWithSlots = () => {
             })}
           </div>
 
-          {/* Créneaux */}
           {selectedDate && (
             <AvailableSlots
               selectedDate={selectedDate}
@@ -407,11 +393,11 @@ const MonthlyCalendarWithSlots = () => {
           successMessage={successMessage}
           isSubmitting={isSubmitting}
           isFormValid={formValid}
-          handleRequest={handleRequest} // ✅ étape 1
-          handleConfirm={handleConfirm} // ✅ étape 2
-          step={step} // ✅ "form" | "verify"
-          verificationCode={verificationCode} // ✅ valeur du code
-          setVerificationCode={setVerificationCode} // ✅ onChange
+          handleRequest={handleRequest} 
+          handleConfirm={handleConfirm} 
+          step={step} 
+          verificationCode={verificationCode} 
+          setVerificationCode={setVerificationCode} 
           setShowModal={setShowModal}
         />
       )}
