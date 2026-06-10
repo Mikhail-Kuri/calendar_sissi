@@ -9,9 +9,9 @@ const HERO_SLIDES = [
     tag: "Extensions de cils · Sissi Signature",
     title: (
       <>
-        Sublimez votre regard
+        Un regard qui
         <br />
-        chez Sissi Signature
+        vous démarque
       </>
     ),
     subtitle:
