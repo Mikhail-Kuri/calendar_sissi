@@ -48,7 +48,7 @@ export default function HomePage() {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % n);
-    }, 8000);
+    }, 5000);
   };
 
   useEffect(() => {

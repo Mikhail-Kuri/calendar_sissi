@@ -45,7 +45,7 @@ export default function EyelashTypeSelector() {
         </header>
 
         <div className="ets-body">
-          <p className="ets-step-label">Étape 1 sur 3</p>
+          {/* <p className="ets-step-label">Étape 1 sur 3</p> */}
           <p className="ets-section-title">Quel type d'extensions vous correspond ?</p>
 
           <div className="ets-grid">

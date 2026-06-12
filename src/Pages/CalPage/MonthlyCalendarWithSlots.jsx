@@ -328,6 +328,13 @@ const MonthlyCalendarWithSlots = () => {
           <h1>Réservation — {currentType}</h1>
           <p>Sélectionnez une date pour consulter les créneaux disponibles</p>
         </header>
+        {/* <div className="parent-container">
+          <p className="">Étape 2 sur 3</p>
+          <br />
+          <p className="">
+            Quel type d'extensions vous correspond ?
+          </p>
+        </div> */}
 
         <div className="calendar-container">
           <div className="calendar-info-wrapper">
