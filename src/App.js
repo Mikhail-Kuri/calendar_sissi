@@ -1,7 +1,6 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import CalendarApp from "./Pages/MainPage/CalendarApp";
 import MonthlyCalendarWithSlots from "./Pages/CalPage/MonthlyCalendarWithSlots";
 import HomePage from "./Pages/MainPage/HomePages/HomePage";
 import InstructionPage from "./Pages/InstructionPage/InstructionPage";
