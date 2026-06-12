@@ -17,7 +17,7 @@ const HERO_SLIDES = [
     subtitle:
       "Prestations personnalisées · Produits premium · Résultats durables",
     btnLabel: "Réserver — Extensions cils",
-    path: "/calendar",
+    path: "/selector/lashes",
   },
   {
     id: "nails",
@@ -31,7 +31,7 @@ const HERO_SLIDES = [
     ),
     subtitle: "Gel · Capsules · Nail art · Soins sur mesure",
     btnLabel: "Réserver — Ongles",
-    path: "/calendar",
+    path: "/selector/nails",
   },
 ];
 
