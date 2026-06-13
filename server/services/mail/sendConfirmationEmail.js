@@ -1,4 +1,4 @@
-import { getResend } from "./resendClient.js";
+import { getResend } from "../../../src/services/mail/resendClient.js";
 
 export const sendConfirmationEmail = async ({ email, start, end, name }) => {
   const formattedDate = new Date(start).toLocaleString("fr-CA", {

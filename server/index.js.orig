@@ -1,17 +1,19 @@
-import dotenv from "dotenv";
-import crypto from "crypto";
-dotenv.config({ path: "../.env" });
+import "./env.js";
 
-console.log("✅ RESEND:", process.env.RESEND_API_KEY);
+import app from "./app.js";
 
+<<<<<<< HEAD
 import express from "express";
 import cors from "cors";
 import { google } from "googleapis";
 
 import { sendConfirmationEmail } from "../src/services/mail/sendConfirmationEmail.js";
 import { sendVerificationEmail } from "../src/services/mail/sendVerificationEmail.js";
-import { saveCode, getCode, deleteCode } from "../src/services/mail/verificationStore.js";
-
+import {
+  saveCode,
+  getCode,
+  deleteCode,
+} from "../src/services/mail/verificationStore.js";
 
 const app = express();
 
@@ -129,7 +131,8 @@ app.get("/appointments", async (req, res) => {
 // 🔐 ÉTAPE 1 — Valider le slot + envoyer le code
 // ======================================================
 app.post("/appointments/request", async (req, res) => {
-  const { title, description, start, end, email, phone, breakMinute, eventId } = req.body;
+  const { title, description, start, end, email, phone, breakMinute, eventId } =
+    req.body;
 
   if (!eventId || !start || !end || !email) {
     return res.status(400).json({
@@ -182,7 +185,11 @@ app.post("/appointments/request", async (req, res) => {
     const hasConflict = existingEvents.data.items.some((ev) => {
       const evStart = new Date(ev.start.dateTime || ev.start.date);
       const evEnd = new Date(ev.end.dateTime || ev.end.date);
-      return resStart < evEnd && resEnd > evStart && ev.transparency !== "transparent";
+      return (
+        resStart < evEnd &&
+        resEnd > evStart &&
+        ev.transparency !== "transparent"
+      );
     });
 
     if (hasConflict) {
@@ -196,7 +203,17 @@ app.post("/appointments/request", async (req, res) => {
     const token = crypto.randomUUID();
     const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-    saveCode(token, { code, eventId, title, description, start, end, email, phone, breakMinute });
+    saveCode(token, {
+      code,
+      eventId,
+      title,
+      description,
+      start,
+      end,
+      email,
+      phone,
+      breakMinute,
+    });
 
     await sendVerificationEmail({ email, code });
 
@@ -205,7 +222,6 @@ app.post("/appointments/request", async (req, res) => {
       token,
       message: "Code envoyé à votre adresse email.",
     });
-
   } catch (error) {
     console.error("Erreur /appointments/request:", error);
     return res.status(500).json({
@@ -257,7 +273,8 @@ app.post("/appointments/confirm", async (req, res) => {
   deleteCode(token);
 
   // Reconstruire les variables depuis le store
-  const { eventId, title, description, start, end, email, phone, breakMinute } = pending;
+  const { eventId, title, description, start, end, email, phone, breakMinute } =
+    pending;
 
   if (!acquireLock(eventId)) {
     return res.status(409).json({
@@ -312,7 +329,11 @@ app.post("/appointments/confirm", async (req, res) => {
     const hasConflict = existingEvents.data.items.some((ev) => {
       const evStart = new Date(ev.start.dateTime || ev.start.date);
       const evEnd = new Date(ev.end.dateTime || ev.end.date);
-      return resStart < evEnd && resEnd > evStart && ev.transparency !== "transparent";
+      return (
+        resStart < evEnd &&
+        resEnd > evStart &&
+        ev.transparency !== "transparent"
+      );
     });
 
     if (hasConflict) {
@@ -337,7 +358,7 @@ app.post("/appointments/confirm", async (req, res) => {
 
     eventsToCreate.push({
       summary: title || "BOOKED",
-      description: `📧 Email: ${email}\n📞 Téléphone: ${phone}\n\n${description || ""}`,
+      description: description || "",
       start: { dateTime: resStart.toISOString() },
       end: { dateTime: bookedEndWithBreak.toISOString() },
       transparency: "opaque",
@@ -373,15 +394,6 @@ app.post("/appointments/confirm", async (req, res) => {
       createdEvents.push(created.data);
     }
 
-<<<<<<< HEAD
-    // 🔥 EMAIL AFTER SUCCESSFUL BOOKING
-    // console.log(email);
-    // sendConfirmationEmail({
-    //   email,
-    //   start: resStart,
-    //   end: resEnd,
-    // }).catch((err) => console.error("Email failed:", err));
-=======
     // 6️⃣ DELETE ORIGINAL SLOT
     await calendar.events.delete({
       calendarId: process.env.GOOGLE_CALENDAR_ID,
@@ -389,19 +401,17 @@ app.post("/appointments/confirm", async (req, res) => {
     });
 
     // 🔥 EMAIL DE CONFIRMATION
-    sendConfirmationEmail({
-      email,
-      start: resStart,
-      end: resEnd,
-    }).catch((err) => console.error("Email failed:", err));
->>>>>>> 3d15ffa34a4b2e90ace61f33fd940f39773dcb17
+    // sendConfirmationEmail({
+    //   email,
+    //   start: resStart,
+    //   end: resEnd,
+    // }).catch((err) => console.error("Email failed:", err));
 
     return res.status(200).json({
       success: true,
       message: "Réservation créée avec succès.",
       created: createdEvents.map((e) => e.id),
     });
-
   } catch (error) {
     console.error("Erreur /appointments/confirm:", error);
     return res.status(500).json({
@@ -446,6 +456,8 @@ app.put("/appointments/:id", async (req, res) => {
 });
 
 // Démarrage du serveur
+=======
+>>>>>>> cf39f9bd2a19d7b20a2dec304f68b8545d67d94c
 const PORT = process.env.SERVER_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Serveur en ligne sur http://localhost:${PORT}`);
