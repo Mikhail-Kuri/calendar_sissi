@@ -21,7 +21,7 @@ export default function Navbar() {
         </Link>
         <div className="nav-links">
           <Link to="/">Accueil</Link>
-          <Link to="/calendar">Réserver</Link>
+          <Link to="/selector/lashes">Réserver</Link>
         </div>
         <button
           className={`burger ${menuOpen ? "open" : ""}`}
@@ -38,7 +38,7 @@ export default function Navbar() {
         <Link to="/" onClick={() => setMenuOpen(false)}>
           Accueil
         </Link>
-        <Link to="/calendar" onClick={() => setMenuOpen(false)}>
+        <Link to="/selector/lashes" onClick={() => setMenuOpen(false)}>
           Réserver
         </Link>
       </div>
