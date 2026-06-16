@@ -21,7 +21,7 @@ export default function InstructionPage() {
       <section className="instr-body">
         <div className="instr-main-card">
           <div className="instr-meta-badge">
-            💰 {lash?.price}$ &nbsp;·&nbsp; ⏱️ {lash?.duration}
+            Prix: {lash?.price}$ &nbsp;·&nbsp; Temps: {lash?.duration}
           </div>
 
           <h2>Avant votre rendez-vous</h2>
@@ -47,24 +47,6 @@ export default function InstructionPage() {
               <span className="instr-check">✓</span>Veuillez arriver à l'heure.
             </li>
           </ul>
-        </div>
-
-        <aside className="instr-side">
-          <div className="side-card">
-            <span className="side-card-label">Tarif</span>
-            <p className="instr-price-big">{lash?.price}$</p>
-            <p className="instr-price-sub">
-              Acompte de {lash?.deposit}$ requis
-            </p>
-          </div>
-
-          <div className="side-card">
-            <span className="side-card-label">Disponibilité</span>
-            <div className="avail-row">
-              <span className="pulse-dot" />
-              Ouvert aux réservations
-            </div>
-          </div>
 
           <button
             className="instr-continue-btn"
@@ -72,7 +54,7 @@ export default function InstructionPage() {
           >
             Continuer vers le calendrier
           </button>
-        </aside>
+        </div>
       </section>
     </div>
   );

@@ -44,20 +44,16 @@
 
 /* ── Layout ── */
 .instr-body {
-  max-width: 860px;
+  max-width: 620px;
   margin: 0 auto;
-  padding: 32px 28px 40px;
-  display: grid;
-  grid-template-columns: 1fr 220px;
-  gap: 24px;
-  align-items: start;
+  padding: 32px 28px 48px;
 }
 
 /* ── Main card ── */
 .instr-main-card {
   background: var(--card);
   border-radius: 16px;
-  padding: 26px 28px;
+  padding: 26px 28px 28px;
 }
 
 .instr-meta-badge {
@@ -83,7 +79,7 @@
 .instr-checklist {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0 24px;
 }
 
 .instr-checklist li {
@@ -116,26 +112,7 @@
   margin-top: 4px;
 }
 
-/* ── Sidebar ── */
-.instr-side {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.instr-price-big {
-  font-size: 24px;
-  font-weight: 600;
-  color: var(--accent-dark);
-  margin: 0 0 4px;
-}
-
-.instr-price-sub {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin: 0;
-}
-
+/* ── Button ── */
 .instr-continue-btn {
   width: 100%;
   background: var(--accent-dark);
@@ -164,21 +141,6 @@
   }
 
   .instr-body {
-    grid-template-columns: 1fr;
     padding: 20px 16px 32px;
-  }
-
-  .instr-side {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .side-card {
-    flex: 1;
-    min-width: 130px;
-  }
-
-  .instr-continue-btn {
-    flex-basis: 100%;
   }
 }

@@ -28,7 +28,6 @@ body {
 /* ── HERO ─────────────────────────────────────────── */
 
 .hero-section {
-  position: relative;
   background: linear-gradient(
     155deg,
     var(--accent-dark) 0%,
@@ -36,32 +35,11 @@ body {
   );
   color: white;
   text-align: center;
-  /* hauteur fixe pour que les slides absolus aient un conteneur */
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* Chaque slide est positionné en absolu et fade in/out */
-.hero-slide {
-  position: absolute;
-  inset: 0;
+  padding: 72px 24px 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 52px 24px 56px;
-
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-
-.hero-slide.active {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .hero-tag {
@@ -74,22 +52,29 @@ body {
   text-transform: uppercase;
   border-radius: 20px;
   padding: 5px 14px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .hero-section h1 {
-  font-size: clamp(22px, 4.5vw, 32px);
+  font-size: clamp(28px, 6vw, 48px);
   font-weight: 600;
-  margin: 0 0 10px;
-  line-height: 1.25;
+  margin: 0 0 14px;
+  line-height: 1.2;
   color: white;
 }
 
 .hero-section p {
   font-size: 15px;
   color: rgba(255, 255, 255, 0.78);
-  margin: 0 0 28px;
+  margin: 0 0 32px;
   font-weight: 400;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .btn-reserver {
@@ -112,74 +97,24 @@ body {
   transform: translateY(-2px);
 }
 
-/* Dots */
-.hero-dots {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 8px;
-  z-index: 10;
-}
-
-.hero-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition:
-    background 0.25s ease,
-    transform 0.25s ease;
-}
-
-.hero-dot.active {
-  background: white;
-  transform: scale(1.25);
-}
-
-/* Flèches */
-.hero-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.2);
+.btn-reserver--outline {
+  background: transparent;
   color: white;
-  border: none;
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s ease;
-  z-index: 10;
+  border: 2px solid rgba(255, 255, 255, 0.7);
 }
 
-.hero-arrow:hover {
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.hero-arrow.left {
-  left: 16px;
-}
-.hero-arrow.right {
-  right: 16px;
+.btn-reserver--outline:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
 }
 
 /* ── BODY LAYOUT ──────────────────────────────────── */
 
 .infos-section {
-  max-width: 860px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 32px 28px 40px;
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 220px;
   gap: 24px;
   align-items: start;
@@ -350,44 +285,16 @@ body {
 
 @media (max-width: 620px) {
   .hero-section {
-    min-height: 280px;
-  }
-
-  .infos-section {
-    grid-template-columns: 1fr;
-    padding: 20px 16px 32px;
-  }
-
-  .infos-side {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .side-card {
-    flex: 1;
-    min-width: 140px;
-  }
-}
-
-/* ── MOBILE ───────────────────────────────────────── */
-
-@media (max-width: 620px) {
-  /* Hero */
-  .hero-section {
-    min-height: 260px;
-  }
-
-  .hero-slide {
-    padding: 40px 20px 52px;
+    padding: 52px 20px 60px;
   }
 
   .hero-section h1 {
-    font-size: 22px;
+    font-size: 28px;
   }
 
   .hero-section p {
     font-size: 13px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
   }
 
   .btn-reserver {
@@ -395,19 +302,12 @@ body {
     font-size: 14px;
   }
 
-  /* Flèches cachées sur mobile — on swipe */
-  .hero-arrow {
-    display: none;
-  }
-
-  /* Infos section : colonne unique */
   .infos-section {
     grid-template-columns: 1fr;
     padding: 20px 16px 32px;
     gap: 18px;
   }
 
-  /* Tabs : pleine largeur */
   .tab-bar {
     gap: 6px;
   }
@@ -432,7 +332,6 @@ body {
     font-size: 13.5px;
   }
 
-  /* Sidebar : rangée de 3 cards */
   .infos-side {
     flex-direction: row;
     flex-wrap: wrap;
@@ -445,7 +344,6 @@ body {
     padding: 14px 12px;
   }
 
-  /* Card disponibilité prend toute la largeur */
   .side-card:first-child {
     flex-basis: 100%;
   }
