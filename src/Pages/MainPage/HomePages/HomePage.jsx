@@ -29,15 +29,9 @@ export default function HomePage() {
         <div className="hero-btns">
           <button
             className="btn-reserver"
-            onClick={() => navigate("/selector/lashes")}
+            onClick={() => navigate("/selector")}
           >
-            Extensions de cils
-          </button>
-          <button
-            className="btn-reserver btn-reserver--outline"
-            onClick={() => navigate("/selector/nails")}
-          >
-            Ongles
+            Prendre rendez-vous avec Sissi
           </button>
         </div>
       </header>

@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MonthlyCalendarWithSlots from "./Pages/CalPage/MonthlyCalendarWithSlots";
 import HomePage from "./Pages/MainPage/HomePages/HomePage";
 import InstructionPage from "./Pages/InstructionPage/InstructionPage";
-import EyelashTypeSelector from "./composant/Pages/EyelashTypeSelector";
+import EyelashTypeSelector from "./composant/Pages/ServiceSelector";
 import NotFoundPage from "./Pages/NotFound/NotFoundPage";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/selector" element={<Navigate to="/" replace />} />
+        <Route path="/selector" element={<EyelashTypeSelector />} />
 
         <Route path="/selector/lashes" element={<EyelashTypeSelector />} />
         <Route path="/selector/nails" element={<EyelashTypeSelector />} />

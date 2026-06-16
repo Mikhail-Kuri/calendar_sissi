@@ -175,6 +175,52 @@
   font-weight: 600;
 }
 
+.ets-service-selector {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 30px 0;
+  flex-wrap: wrap;
+}
+
+.service-btn {
+  width: 240px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+
+  background: white;
+  color: var(--accent-dark);
+
+  border: 2px solid rgba(0, 0, 0, 0.08);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.service-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+  background: var(--accent-dark);
+  color: white;
+}
+
+.service-btn.active {
+  background: var(--accent-dark);
+  color: white;
+
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
 .ets-select-btn {
   margin-top: auto;
   width: 100%;

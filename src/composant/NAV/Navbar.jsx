@@ -21,7 +21,7 @@ export default function Navbar() {
         </Link>
         <div className="nav-links">
           <Link to="/">Accueil</Link>
-          <Link to="/selector/lashes">Réserver</Link>
+          <Link to="/selector">Réserver</Link>
         </div>
         <button
           className={`burger ${menuOpen ? "open" : ""}`}
