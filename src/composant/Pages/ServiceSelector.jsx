@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../NAV/Navbar";
 import "./CSS/ServiceSelector.css";
 
@@ -165,8 +165,14 @@ const SERVICES = {
 };
 
 export default function EyelashTypeSelector() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const selectedService = searchParams.get("type");
   const navigate = useNavigate();
-  const [selectedService, setSelectedService] = useState(null);
+
+  const handleServiceSelect = (service) => {
+    setSearchParams({ type: service });
+  };
 
   const handleSelect = (lash) => {
     navigate("/instructions", { state: lash });
@@ -187,19 +193,19 @@ export default function EyelashTypeSelector() {
         <div className="ets-body">
           <div className="ets-service-selector">
             <button
-              className={` service-btn ${
+              className={`service-btn ${
                 selectedService === "lashes" ? "active" : ""
               }`}
-              onClick={() => setSelectedService("lashes")}
+              onClick={() => handleServiceSelect("lashes")}
             >
-              ✨ Extensions de cils
+              ✨ Cils
             </button>
 
             <button
-              className={` service-btn ${
+              className={`service-btn ${
                 selectedService === "nails" ? "active" : ""
               }`}
-              onClick={() => setSelectedService("nails")}
+              onClick={() => handleServiceSelect("nails")}
             >
               💅 Ongles
             </button>

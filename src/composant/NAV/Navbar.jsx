@@ -19,10 +19,22 @@ export default function Navbar() {
         <Link to="/" className="logo">
           Sissi
         </Link>
+
         <div className="nav-links">
-          <Link to="/">Accueil</Link>
-          <Link to="/selector">Réserver</Link>
+          {/* Accueil et Réserver partagent maintenant le même look */}
+          <Link to="/" className="nav-link-btn">
+            Accueil
+          </Link>
+
+          <div className="nav-dropdown">
+            <button className="nav-drop-btn">Réserver ▾</button>
+            <div className="dropdown-menu">
+              <Link to="/selector?type=lashes">✨ Cils</Link>
+              <Link to="/selector?type=nails">💅 Ongles</Link>
+            </div>
+          </div>
         </div>
+
         <button
           className={`burger ${menuOpen ? "open" : ""}`}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -38,9 +50,15 @@ export default function Navbar() {
         <Link to="/" onClick={() => setMenuOpen(false)}>
           Accueil
         </Link>
-        <Link to="/selector/lashes" onClick={() => setMenuOpen(false)}>
-          Réserver
-        </Link>
+        <div className="mobile-menu-item">
+          <span>Réserver</span>
+          <Link to="/selector?type=lashes" onClick={() => setMenuOpen(false)}>
+            ✨ Cils
+          </Link>
+          <Link to="/selector?type=nails" onClick={() => setMenuOpen(false)}>
+            💅 Ongles
+          </Link>
+        </div>
       </div>
     </>
   );

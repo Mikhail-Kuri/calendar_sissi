@@ -29,7 +29,7 @@ export default function HomePage() {
         <div className="hero-btns">
           <button
             className="btn-reserver"
-            onClick={() => navigate("/selector")}
+            onClick={() => navigate("/selector?type=lashes")}
           >
             Prendre rendez-vous avec Sissi
           </button>

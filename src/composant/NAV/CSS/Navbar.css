@@ -1,4 +1,7 @@
-/* ── DESKTOP ── */
+/* ==========================================================================
+   ── DESKTOP ──
+   ========================================================================== */
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -21,41 +24,99 @@
 
 .nav-links {
   display: flex;
-  gap: 24px;
+  gap: 12px;
+  align-items: center;
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: #5a4a44;
+/* ── BOUTONS & LIENS DE NAVIGATION (COMMUN) ── */
+.nav-link-btn,
+.nav-drop-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 500;
-  font-size: 14px;
-  position: relative;
-  padding-bottom: 3px;
+  text-decoration: none;
+  color: #5a4a44; /* Couleur sombre de base */
+
+  padding: 8px 14px;
+  border-radius: 10px;
+  display: inline-block;
+  cursor: pointer;
+
   transition: color 0.2s ease;
 }
 
-.nav-links a::after {
-  content: "";
+/* Le texte devient un peu plus clair au survol (sans changer le fond) */
+.nav-link-btn:hover,
+.nav-drop-btn:hover,
+.nav-dropdown:hover .nav-drop-btn {
+  color: #9c867c; /* Nuance plus claire et douce du brun d'origine */
+  background: none;
+}
+
+/* ── MENU DÉROULANT (DROPDOWN) ── */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
   position: absolute;
+  top: 100%;
   left: 0;
-  bottom: 0;
-  width: 0%;
-  height: 1.5px;
-  background: #728365;
-  transition: width 0.25s ease;
+
+  min-width: 160px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+
+  transition: all 0.2s ease;
+  z-index: 1000;
 }
 
-.nav-links a:hover,
-.nav-links a.active {
+/* Reste ouvert au survol */
+.nav-dropdown:hover .dropdown-menu,
+.dropdown-menu.open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-menu a {
+  padding: 12px 14px;
+  text-decoration: none;
   color: #2d3d29;
+  font-size: 14px;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
 }
 
-.nav-links a:hover::after,
-.nav-links a.active::after {
-  width: 100%;
+.dropdown-menu a:first-child {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
 }
 
-/* Burger — caché sur desktop */
+.dropdown-menu a:last-child {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Les liens à l'intérieur du dropdown s'éclaircissent aussi au survol */
+.dropdown-menu a:hover {
+  color: #5a6e56; /* Version plus claire du vert de base #2d3d29 */
+  background: none;
+}
+
+/* ── INTERRUPTEURS BURGER (CACHÉS SUR DESKTOP) ── */
 .burger {
   display: none;
 }
@@ -64,7 +125,10 @@
   display: none;
 }
 
-/* ── MOBILE ── */
+/* ==========================================================================
+   ── MOBILE ──
+   ========================================================================== */
+
 @media (max-width: 700px) {
   .navbar {
     padding: 13px 16px;
@@ -72,7 +136,7 @@
   }
 
   .nav-links {
-    display: none; /* remplacé par le menu déroulant */
+    display: none;
   }
 
   .burger {
@@ -118,7 +182,8 @@
     max-height: 300px;
   }
 
-  .mobile-menu a {
+  .mobile-menu a,
+  .mobile-menu-item span {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -128,11 +193,22 @@
     font-size: 14px;
     font-weight: 500;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    transition: background 0.15s;
+    transition: color 0.15s;
   }
 
+  .mobile-menu-item span {
+    color: #ffffff;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  .mobile-menu-item a {
+    padding-left: 35px;
+  }
+
+  /* Sur mobile, le texte devient également plus lumineux au survol */
   .mobile-menu a:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #e8f0e5;
+    background: none;
+    color: #ffffff;
   }
 }
