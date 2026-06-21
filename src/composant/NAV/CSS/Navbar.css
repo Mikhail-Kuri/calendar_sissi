@@ -14,13 +14,17 @@
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2d3d29;
-  font-family: "Playfair Display", serif;
-  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
   text-decoration: none;
 }
+
+.logo-img {
+  height: 42px;
+  width: auto;
+  display: block;
+  border-radius: 8px; /* adoucit les bords du fond vert, retire si pas voulu */
+} 
 
 .nav-links {
   display: flex;

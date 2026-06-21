@@ -17,11 +17,10 @@ export default function Navbar() {
     <>
       <nav className="navbar">
         <Link to="/" className="logo">
-          Sissi
+          <img src="/photos/logo.jpg" alt="Sissi" className="logo-img" />
         </Link>
 
         <div className="nav-links">
-          {/* Accueil et Réserver partagent maintenant le même look */}
           <Link to="/" className="nav-link-btn">
             Accueil
           </Link>

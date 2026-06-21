@@ -14,6 +14,13 @@ export default function Footer() {
         <div className="footer-contact">
           <a href="tel:+15144430575">(514) 443-0575</a>
           <a href="mailto:cicilsignature@gmail.com">cicilsignature@gmail.com</a>
+          <a
+            href="https://www.instagram.com/sissi.signature/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @sisi.signature
+          </a>
         </div>
       </div>
 
