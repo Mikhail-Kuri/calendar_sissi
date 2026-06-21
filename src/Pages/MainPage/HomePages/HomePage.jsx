@@ -25,7 +25,7 @@ export default function HomePage() {
           <br />
           chez nous
         </h1>
-        <p>Extensions de cils · Nail art · Soins sur mesure</p>
+        <p>Extensions de cils · Nail art · Beauté personnalisée</p>
         <div className="hero-btns">
           <button
             className="btn-reserver"

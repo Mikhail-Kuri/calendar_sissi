@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../composant/NAV/Navbar";
 import "./CSS/InstructionPage.css";
+import Footer from "../../composant/Footer/footer.jsx"
 
 export default function InstructionPage() {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ export default function InstructionPage() {
           </button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

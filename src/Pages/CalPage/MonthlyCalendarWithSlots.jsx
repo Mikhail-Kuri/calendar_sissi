@@ -14,6 +14,7 @@ import {
 import { useAppointments } from "../../hooks/useAppointments";
 import { AvailableSlots } from "../../composant/Pages/AvailableSlots";
 import { AppointmentModal } from "../../composant/Pages/AppointmentModal";
+import Footer from "../../composant/Footer/footer.jsx";
 
 const MonthlyCalendarWithSlots = () => {
   const location = useLocation();
@@ -391,6 +392,7 @@ const MonthlyCalendarWithSlots = () => {
             />
           )}
         </div>
+        <Footer />
       </div>
 
       {showModal && (

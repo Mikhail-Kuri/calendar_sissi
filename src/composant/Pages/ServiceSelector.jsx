@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "../NAV/Navbar";
 import "./CSS/ServiceSelector.css";
+import Footer from "../../composant/Footer/footer.jsx";
 
 class Type {
   constructor(id, service, type, desc, image, price, duration, deposit, tag) {
@@ -183,7 +184,9 @@ export default function EyelashTypeSelector() {
             Extensions de cils · Sissi Signature
           </div>
           <h1>Choisissez votre style</h1>
-          <p>Chaque prestation est adaptée à la morphologie de vos yeux</p>
+          <p>
+            Chaque prestation est conçue pour sublimer votre beauté naturelle.
+          </p>
         </header>
 
         <div className="ets-body">
@@ -224,6 +227,7 @@ export default function EyelashTypeSelector() {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
@@ -231,34 +235,32 @@ export default function EyelashTypeSelector() {
 function LashCard({ lash, onSelect }) {
   return (
     <div className="ets-card" onClick={() => onSelect(lash)}>
-      <div className="ets-card-img">
-        <img src={lash.image} alt={`${lash.type} extensions`} />
+      <div className="ets-card-top">
+        <div className="ets-card-icon">{lash.type.charAt(0)}</div>
         <span className="ets-tag-badge">{lash.tag}</span>
-        <span className="ets-price-badge">{lash.price} $</span>
       </div>
-      <div className="ets-card-body">
-        <div>
-          <h3>{lash.type}</h3>
-          <p className="ets-card-desc">{lash.desc}</p>
-        </div>
 
-        <div className="ets-card-footer">
-          <div className="ets-card-footer-info">
-            <span className="ets-pill">⏱ {lash.duration}</span>
-            <span className="ets-deposit">
-              Acompte <strong>{lash.deposit} $</strong>
-            </span>
-          </div>
-          <button
-            className="ets-select-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelect(lash);
-            }}
-          >
-            Sélectionner
-          </button>
-        </div>
+      <h3>{lash.type}</h3>
+      <p className="ets-card-desc">{lash.desc}</p>
+
+      <div className="ets-card-price-row">
+        <span className="ets-price">{lash.price} $</span>
+        <span className="ets-pill">⏱ {lash.duration}</span>
+      </div>
+
+      <div className="ets-card-footer">
+        <span className="ets-deposit">
+          Acompte <strong>{lash.deposit} $</strong>
+        </span>
+        <button
+          className="ets-select-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect(lash);
+          }}
+        >
+          Sélectionner
+        </button>
       </div>
     </div>
   );
