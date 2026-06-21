@@ -38,15 +38,20 @@ export function AppointmentModal({
 
         {modalState === "success" && (
           <div className="modalCenter success">
-            <h2>🎉 Réservation confirmée</h2>
+            <div className="successIcon">✓</div>
+            <h2>Réservation confirmée</h2>
             <p>Merci ! Votre rendez-vous a été enregistré.</p>
-            <p>À bientôt 👋</p>
+            <p>
+              Vous recevrez un courriel de confirmation pour la réservation.
+            </p>
+            <p className="successSub">À bientôt 👋</p>
           </div>
         )}
 
         {modalState === "idle" && step === "form" && (
           <>
-            <h2 className="modalTitle">📌 Informations du rendez-vous</h2>
+            <h2 className="modalTitle">Informations du rendez-vous</h2>
+
             <label>Numéro de téléphone *</label>
             <input
               type="text"
@@ -56,6 +61,7 @@ export function AppointmentModal({
                 handleChange("phone", formatPhoneNumber(e.target.value))
               }
             />
+
             <label>Email *</label>
             <input
               type="email"
@@ -64,28 +70,19 @@ export function AppointmentModal({
               onChange={(e) => handleChange("email", e.target.value)}
             />
 
-            {/* 
-          <label>Confirmation du Email *</label>
-            <input
-              type="email"
-              className="input"
-              value={formData.confirmationEmail}
-              onChange={(e) =>
-                handleChange("confirmationEmail", e.target.value)
-              }
-            />
-            */}
             <label>Message (optionnel)</label>
             <textarea
               className="textarea"
               value={formData.message}
               onChange={(e) => handleChange("message", e.target.value)}
             />
+
             {errorMessage && <p className="errorMessage">{errorMessage}</p>}
+
             <div className="modalActions">
               <button
                 type="button"
-                className="button"
+                className="button buttonSecondary"
                 onClick={() => setShowModal(false)}
               >
                 Annuler
@@ -93,7 +90,7 @@ export function AppointmentModal({
 
               <button
                 type="button"
-                className="button"
+                className="button buttonPrimary"
                 disabled={!isFormValid || isSubmitting}
                 onClick={handleRequest}
               >
@@ -107,14 +104,14 @@ export function AppointmentModal({
           <>
             <h2 className="modalTitle">Vérification du code</h2>
 
-            <p>
+            <p className="modalSubtext">
               Un code de vérification a été envoyé à votre adresse courriel.
             </p>
 
             <input
               type="text"
-              className="input"
-              placeholder="Code de vérification"
+              className="input codeInput"
+              placeholder="123456"
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
             />
@@ -124,7 +121,7 @@ export function AppointmentModal({
             <div className="modalActions">
               <button
                 type="button"
-                className="button"
+                className="button buttonSecondary"
                 onClick={() => setShowModal(false)}
               >
                 Annuler
@@ -132,7 +129,7 @@ export function AppointmentModal({
 
               <button
                 type="button"
-                className="button"
+                className="button buttonPrimary"
                 disabled={isSubmitting}
                 onClick={handleConfirm}
               >

@@ -1,32 +1,267 @@
+/* ── OVERLAY ──────────────────────────────────────── */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 24, 18, 0.45);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 2000;
+  animation: overlayFade 0.2s ease;
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ── CARD ─────────────────────────────────────────── */
+
+.modalContent {
+  background: var(--card);
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  padding: 30px 28px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 24px 48px -16px rgba(0, 0, 0, 0.32);
+  animation: contentRise 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes contentRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 18px;
+}
+
+.modalSubtext {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+/* ── FORM ─────────────────────────────────────────── */
+
+label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+
+label:not(:first-child) {
+  margin-top: 16px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 11px 14px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 0 3px rgba(45, 61, 41, 0.12);
+}
+
+.codeInput {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 8px;
+  padding: 14px 14px 14px 22px; /* compense visuellement le letter-spacing */
+}
+
+.errorMessage {
+  font-size: 12.5px;
+  color: #b3392f;
+  background: rgba(179, 57, 47, 0.08);
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin: 14px 0 0;
+}
+
+/* ── ACTIONS ──────────────────────────────────────── */
+
+.modalActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.button {
+  flex: 1;
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--accent-dark);
+  outline-offset: 2px;
+}
+
+.buttonPrimary {
+  background: var(--accent-dark);
+  color: white;
+  border: none;
+}
+
+.buttonPrimary:hover:not(:disabled) {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.buttonPrimary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.buttonSecondary {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+}
+
+.buttonSecondary:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--text);
+}
+
+/* ── LOADING / SUCCESS STATES ─────────────────────── */
+
 .modalCenter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  text-align: center;
+  gap: 6px;
 }
 
 .spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #ddd;
-    border-top: 4px solid #333;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(0, 0, 0, 0.08);
+  border-top: 3px solid var(--accent-dark);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 14px;
 }
 
 @keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .success {
-    animation: pop 0.4s ease;
+  animation: pop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.successIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-dark);
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.success h2 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent-dark);
+  margin: 0 0 6px;
+}
+
+.success p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.successSub {
+  margin-top: 4px !important;
 }
 
 @keyframes pop {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── MOBILE ───────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .modalContent {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .modalActions {
+    flex-direction: column-reverse;
+  }
 }
