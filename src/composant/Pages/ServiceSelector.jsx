@@ -85,6 +85,7 @@ const EYELASH_TYPES = [
     "Félin",
   ),
 ];
+
 const NAIL_TYPES = [
   new Type(
     101,
@@ -97,7 +98,6 @@ const NAIL_TYPES = [
     20,
     "Populaire",
   ),
-
   new Type(
     102,
     "nails",
@@ -109,7 +109,6 @@ const NAIL_TYPES = [
     20,
     "Résistant",
   ),
-
   new Type(
     103,
     "nails",
@@ -121,7 +120,6 @@ const NAIL_TYPES = [
     10,
     "Naturel",
   ),
-
   new Type(
     104,
     "nails",
@@ -133,7 +131,6 @@ const NAIL_TYPES = [
     15,
     "Brillant",
   ),
-
   new Type(
     105,
     "nails",
@@ -145,7 +142,6 @@ const NAIL_TYPES = [
     20,
     "Créatif",
   ),
-
   new Type(
     106,
     "nails",
@@ -210,7 +206,7 @@ export default function EyelashTypeSelector() {
               💅 Ongles
             </button>
           </div>
-          {/* <p className="ets-step-label">Étape 1 sur 3</p> */}
+
           <p className="ets-section-title">
             Quel type d'extensions vous correspond ?
           </p>
@@ -237,7 +233,8 @@ function LashCard({ lash, onSelect }) {
     <div className="ets-card" onClick={() => onSelect(lash)}>
       <div className="ets-card-img">
         <img src={lash.image} alt={`${lash.type} extensions`} />
-        <div className="ets-price-badge">{lash.price} $</div>
+        <span className="ets-tag-badge">{lash.tag}</span>
+        <span className="ets-price-badge">{lash.price} $</span>
       </div>
       <div className="ets-card-body">
         <div>
@@ -245,15 +242,12 @@ function LashCard({ lash, onSelect }) {
           <p className="ets-card-desc">{lash.desc}</p>
         </div>
 
-        <p className="ets-deposit">
-          Acompte requis : <strong>{lash.deposit} $</strong>
-        </p>
-
-        {/* Footer : pills + bouton — layout change via CSS sur mobile */}
         <div className="ets-card-footer">
-          <div className="ets-meta">
+          <div className="ets-card-footer-info">
             <span className="ets-pill">⏱ {lash.duration}</span>
-            <span className="ets-pill">{lash.tag}</span>
+            <span className="ets-deposit">
+              Acompte <strong>{lash.deposit} $</strong>
+            </span>
           </div>
           <button
             className="ets-select-btn"
