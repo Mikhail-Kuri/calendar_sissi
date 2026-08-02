@@ -7,6 +7,7 @@ import {
 
 import { validateSlot, createBooking } from "../services/booking.service.js";
 import { sendVerificationEmail } from "../services/mail/sendVerificationEmail.js";
+import {sendConfirmationEmail} from "../services/mail/sendConfirmationEmail.js";
 
 import {
   saveCode,
@@ -126,6 +127,7 @@ export async function confirmAppointment(req, res) {
       phone,
       breakMinute,
     });
+    await sendConfirmationEmail({  title, description, start, end, email, phone, breakMinute });
 
     return res.status(200).json({
       success: true,
